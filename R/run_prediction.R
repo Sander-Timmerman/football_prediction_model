@@ -145,7 +145,7 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
     }
     close(pb)
     
-    results_table <- create_results_table(all_simulations)
+    results_table <- create_results_table(all_simulations, n_sims, prediction_competition)
     write.xlsx(results_table, paste0("output/kansentabel_", competition, "_on_", Sys.Date(), ".xlsx"))
   }
 }
