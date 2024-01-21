@@ -1,0 +1,18 @@
+run_simulation <- function(prediction_competition, matches_to_simulate, current_standings) {
+  prediction_simulation <- prediction_competition %>%
+    mutate(Punten = rnorm(nrow(prediction_competition), mean=Punten, sd = 0.13),
+           Goals = rnorm(nrow(prediction_competition), mean=Goals, sd = 0.11)) %>%
+    calculate_goal_expectations()
+  matches_to_simulate <- calculate_match_expectations(matches_to_simulate, prediction_simulation, 1.35)
+  
+  simulation_standings <- matches_to_simulate %>%
+    mutate(FTHG = rpois(nrow(matches_to_simulate), lambda = matches_to_simulate$ExpHG),
+           FTAG = rpois(nrow(matches_to_simulate), lambda = matches_to_simulate$ExpAG),
+           HPts = 3 * (FTHG > FTAG) + (FTHG == FTAG),
+           APts = 3 * (FTAG > FTHG) + (FTHG == FTAG)) %>%
+    calculate_standings()
+  
+  total_standings <- (current_standings + simulation_standings) %>%
+    mutate(Rank = rank(-(Punten + Doelsaldo * 0.01 + Doelpuntenvoor * 0.0001), ties.method = "random"))
+  return(total_standings)
+}
