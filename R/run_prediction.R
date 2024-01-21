@@ -2,7 +2,8 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
                            all_models_cache = NULL, 
                            player_jsons_cache = NULL, 
                            aggregated_transfermarkt_data_cache = NULL, 
-                           aggregated_transfermarkt_data_new_cache = NULL) {
+                           aggregated_transfermarkt_data_new_cache = NULL,
+                           n_sims = 10000) {
   
   if(is.null(aggregated_football_data_cache)) {
     urls_fd_first_level <- read.csv("input/footballdata2.csv")
@@ -101,7 +102,6 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
   prediction <- rbind(prediction_with_shots, prediction_without_shots)
   next_game_round_prediction <- predict_next_game_round(prediction)
   
-  n_sims <- 10000
   for (competition in unique(prediction$Competitie)) {
     played_matches <- football_data_new[seq(1, nrow(football_data_new), 2),] %>%
       filter(Competitie == competition) %>%
