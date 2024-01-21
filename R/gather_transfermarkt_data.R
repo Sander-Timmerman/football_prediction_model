@@ -48,11 +48,10 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), current_se
       transfermarkt_data <- rbind(transfermarkt_data, temp_transfermarkt_data)
     }
   }
-  save(player_jsons, file = paste0("cache/player_jsons_",
-                                   Sys.Date(),
-                                   ".RData"))
-  save(transfermarkt_data, file = paste0("cache/transfermarkt_data_",
-                                         Sys.Date(),
-                                         ".RData"))
+  if(current_season) {
+    save(player_jsons, file = paste0("cache/player_jsons_",
+                                     Sys.Date(),
+                                     ".RData"))
+  }
   return(transfermarkt_data)
 }
