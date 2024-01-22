@@ -1,4 +1,5 @@
 aggregate_transfermarkt_data <- function(transfermarkt_data) {
+  flog.info("Starts aggregating data from transfermarkt")
   aggregated_transfermarkt_data <- transfermarkt_data %>%
     mutate(Marktwaarde = Marktwaarde ^ (1 / 3)) %>%
     arrange(desc(Marktwaarde)) %>%
