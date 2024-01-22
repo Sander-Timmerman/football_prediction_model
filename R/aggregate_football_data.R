@@ -1,4 +1,5 @@
 aggregate_football_data <- function(football_data) {
+  flog.info("Starts aggregating data from football_data")
   namen <- read.csv("input/namen.csv")
   aggregated_football_data <- football_data %>%
     group_by(Competitie, Seizoen, Niveau) %>%
