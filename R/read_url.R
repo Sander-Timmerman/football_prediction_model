@@ -1,7 +1,7 @@
 read_url <- function(url, use_rvest = TRUE) {
   pagina <- "error"
   pogingen <- 0
-  while(pagina == "error") {
+  while(pagina[1] == "error") {
     pagina <- tryCatch(
       {
         if(use_rvest) {
