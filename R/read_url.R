@@ -14,8 +14,8 @@ read_url <- function(url, use_rvest = TRUE) {
       }
     )
     pogingen <- pogingen + 1
-    if(pogingen == 1) {
-      # flog.error(paste("Pagina met url", url, "kon niet worden gelezen"))
+    if(pogingen == 3) {
+      flog.error(paste("Pagina met url", url, "kon niet worden gelezen"))
       break
     } 
   }
