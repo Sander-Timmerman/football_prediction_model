@@ -15,7 +15,10 @@ create_model_input <- function(aggregated_football_data, aggregated_transfermark
                             by = c("Team" = "Team",
                                    "Competitie" = "Competitie",
                                    "Seizoen" = "Seizoen")) %>%
-    inner_join(aggregated_transfermarkt_data)
+    inner_join(aggregated_transfermarkt_data,
+               by = c("Team" = "Team",
+                      "Competitie" = "Competitie",
+                      "Seizoen" = "Seizoen"))
 
   colnames(model_input)[4 : 5] <- paste0(colnames(model_input)[4 : 5], "_dit_seizoen")
   colnames(model_input)[6 : (ncol(model_input) - 1)] <- paste0(colnames(model_input)[6 : (ncol(model_input) - 1)], "_vorig_seizoen")

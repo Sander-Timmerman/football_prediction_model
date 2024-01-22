@@ -3,7 +3,10 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), current_se
   for(i in seq_len(nrow(urls_tm))) {
     competition_urls <- as.character(urls_tm[i, 3])
     start_date <- urls_tm[i, "Startdatum"]
-    flog.info(paste0("Start met competitie ", as.character(urls_tm[i,1]), ", seizoen ", as.character(urls_tm[i,2])))
+    flog.info(paste0("Starts gathering Transfermarkt data for competition ", 
+                     as.character(urls_tm[i, 1]), 
+                     ", season ", 
+                     as.character(urls_tm[i,2])))
     webpage <- read_url(competition_urls, use_rvest = TRUE)
     club_urls <- html_nodes(webpage, "#yw1 .no-border-links a:nth-child(1)") %>% html_attr("href")
     club_urls <- paste0("http://www.transfermarkt.com", gsub("startseite", "kader", club_urls), "/plus/1")
@@ -11,7 +14,7 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), current_se
       webpage_club <- read_url(club_url, use_rvest = TRUE)
       club_name <- html_nodes(webpage_club, ".data-header__headline-wrapper--oswald") %>% html_text()
       club_name <- substr(club_name, 14, nchar(club_name) - 8)
-      flog.info(paste0("Start met club ", club_name))
+      flog.debug(paste0("Starts gathering Transfermarkt data for ", club_name))
       player_names <- html_nodes(webpage_club, ".inline-table a") %>% html_text()
       player_urls <- html_nodes(webpage_club, ".inline-table a") %>% html_attr("href")
       slashes <- unlist(gregexpr("/", player_urls, fixed = TRUE))[seq(4, length(player_urls) * 4, 4)]

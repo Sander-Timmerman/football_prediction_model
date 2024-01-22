@@ -1,4 +1,5 @@
 predict_next_game_round <- function(prediction) {
+  flog.info("Starts prediction for next game round")
   webpage <- read_url("https://www.transfermarkt.com/eredivisie/spieltagtabelle/wettbewerb/NL1/saison_id/2023", use_rvest = TRUE)
   matches <- html_nodes(webpage, ".hauptlink.hide-for-small a") %>%
     html_text()
