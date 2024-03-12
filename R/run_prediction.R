@@ -3,7 +3,8 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
                            player_jsons_cache = NULL, 
                            aggregated_transfermarkt_data_cache = NULL, 
                            aggregated_transfermarkt_data_new_cache = NULL,
-                           n_sims = 10000) {
+                           n_sims = 10000,
+                           write_results = TRUE) {
   
   if(is.null(aggregated_football_data_cache) | is.null(all_models_cache)) {
     flog.info("Starts gathering and aggregating data from football_data from previous seasons")
@@ -50,7 +51,7 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
   prediction <- create_current_season_prediction(aggregated_football_data, aggregated_transfermarkt_data_new, aggregated_football_data_new, aggregated_level_two_data, all_models)
   next_game_round_prediction <- predict_next_game_round(prediction)
   
-  results_table <- do_monte_carlo_simulation(prediction, football_data_new, namen, n_sims)
+  results_table <- do_monte_carlo_simulation(prediction, football_data_new, namen, n_sims, write_results)
   output <- list(results_table = results_table,
                  prediction = prediction,
                  next_game_round_prediction = next_game_round_prediction)

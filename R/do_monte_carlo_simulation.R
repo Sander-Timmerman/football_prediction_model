@@ -1,4 +1,4 @@
-do_monte_carlo_simulation <- function(prediction, football_data_new, namen, n_sims) {
+do_monte_carlo_simulation <- function(prediction, football_data_new, namen, n_sims, write_results) {
   for (competition in unique(prediction$Competitie)) {
     flog.info("Starting Monte Carlo simulation for competition ", competition)
     played_matches <- football_data_new[seq(1, nrow(football_data_new), 2),] %>%
@@ -28,14 +28,14 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, n_si
                                   Doelsaldo = rep(NA, n_teams * n_sims),
                                   Rank = rep(NA, n_teams * n_sims))
     
-    pb <- winProgressBar(title = paste("Simulating ", competition),
+    pb <- winProgressBar(title = paste0("Simulating ", competition),
                          label = "Simulating has started",
                          min = 0,
                          max = n_sims,
                          initial = 0)
     
     for (sim_nr in 1 : n_sims) {
-      flog.debug(paste0("Starting simulation number", sim_nr))
+      flog.debug(paste0("Starting simulation number ", sim_nr))
       total_standings <- run_simulation(prediction_competition, matches_to_simulate, current_standings)    
       all_simulations[(n_teams * (sim_nr - 1) + 1) : (n_teams * sim_nr), 3 : 6] <- total_standings
       
@@ -45,7 +45,9 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, n_si
     close(pb)
     
     results_table <- create_results_table(all_simulations, n_sims, prediction_competition)
-    write.xlsx(results_table, paste0("output/results_table_", competition, "_on_", Sys.Date(), ".xlsx"))
+    if(write_results) {
+      write.xlsx(results_table, paste0("output/results_table_", competition, "_on_", Sys.Date(), ".xlsx"))
+    }
     flog.info("Written results table for competition ", competition, "in the output folder")
   }
   return(results_table)
