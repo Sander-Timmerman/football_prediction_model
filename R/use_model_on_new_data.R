@@ -8,8 +8,8 @@ use_model_on_new_data <- function(aggregated_football_data, aggregated_transferm
   for(game_round in unique(model_input$Aantalwedstrijden)) {
     model_input_filtered <- filter(model_input, Aantalwedstrijden == game_round)
     model_input_filtered <- mutate(model_input_filtered,
-                                   Punten = predict(all_models[[min(26, game_round + 1)]]$punten[[shots]], newdata = model_input_filtered),
-                                   Goals = predict(all_models[[min(26, game_round + 1)]]$goals[[shots]], newdata = model_input_filtered)) %>%
+                                   Punten = predict(all_models[[min(25, game_round + 1)]]$punten[[shots]], newdata = model_input_filtered),
+                                   Goals = predict(all_models[[min(25, game_round + 1)]]$goals[[shots]], newdata = model_input_filtered)) %>%
       select(Team, Competitie, Punten, Goals)
     prediction <- rbind(prediction, model_input_filtered)
   }
