@@ -12,7 +12,12 @@ run_simulation <- function(prediction_competition, matches_to_simulate, current_
            APts = 3 * (FTAG > FTHG) + (FTHG == FTAG)) %>%
     calculate_standings()
   
-  total_standings <- (current_standings + simulation_standings) %>%
+  if(nrow(current_standings) == nrow(simulation_standings)) {
+    total_standings <- (current_standings[-1] + simulation_standings[-1])
+  } else {
+    total_standings <- combine_standings(current_standings, simulation_standings)[-1]
+  }
+  total_standings <- total_standings %>%
     mutate(Rank = rank(-(Punten + Doelsaldo * 0.01 + Doelpuntenvoor * 0.0001), ties.method = "random"))
   return(total_standings)
 }
