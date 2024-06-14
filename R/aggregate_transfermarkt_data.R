@@ -9,7 +9,7 @@ aggregate_transfermarkt_data <- function(transfermarkt_data) {
     group_by(Competitie, Seizoen) %>%
     mutate(Marktwaarde = Marktwaarde / mean(Marktwaarde),
            Standaardafwijking = (sd(Marktwaarde) * 1.23727 * 0.4277 + 0.2138) / (sd(Marktwaarde) * 1.23727),
-           Marktwaarde = (Marktwaarde - 1)*Standaardafwijking + 1) %>%
+           Marktwaarde = (Marktwaarde - 1) * Standaardafwijking + 1) %>%
     ungroup() %>%
     select(-Standaardafwijking)
   return(aggregated_transfermarkt_data)
