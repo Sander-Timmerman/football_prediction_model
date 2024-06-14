@@ -11,7 +11,7 @@ determine_market_value <- function(json, datum_ref) {
     
     datum <- data_point$datum_mw
     maand <- substr(datum, 1, 3)
-    maanden <- read.csv("maanden.csv", colClasses = c(rep("character", 2)))
+    maanden <- read.csv("input/maanden.csv", colClasses = c(rep("character", 2)))
     maand <- mgsub(maand, maanden$Maand, maanden$Cijfer)
     
     komma <- gregexpr(",", datum, fixed = TRUE)[[1]]
