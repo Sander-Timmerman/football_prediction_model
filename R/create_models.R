@@ -1,13 +1,7 @@
-create_models <- function(all_models_cache, aggregated_transfermarkt_data_cache, transfermarkt_data_cache, player_jsons_cache, football_data, aggregated_football_data) {
+create_models <- function(all_models_cache, aggregated_transfermarkt_data_cache, transfermarkt_data_cache, player_jsons_cache, football_data, aggregated_football_data, data_source_info, is_current_season) {
   if(is.null(all_models_cache)) {
     if(is.null(aggregated_transfermarkt_data_cache)) {
       flog.info("Starts gathering and aggregating data from Transfermarkt from previous seasons")
-      df_startdatums <- football_data %>%
-        filter(Niveau == 1) %>%
-        select(Competitie, Seizoen, Startdatum) %>%
-        distinct()
-      urls_tm <- read.csv("input/transfermarkt.csv") %>%
-        inner_join(df_startdatums, by = c("Competitie", "Seizoen"))
       
       if(is.null(player_jsons_cache)) {
         player_jsons <- list()
@@ -16,10 +10,16 @@ create_models <- function(all_models_cache, aggregated_transfermarkt_data_cache,
         flog.info("Loaded player_jsons from cache")
       }
       if(is.null(transfermarkt_data_cache)) {
-        transfermarkt_data <- gather_transfermarkt_data(urls_tm, player_jsons, current_season = FALSE)
+        df_startdatums <- football_data %>%
+          filter(Niveau == 1) %>%
+          select(Competitie, Seizoen, Startdatum) %>%
+          distinct()
+        urls_tm <- find_data_urls(data_source_info, "transfermarkt", is_current_season) %>%
+          inner_join(df_startdatums, by = c("Competitie", "Seizoen"))
+        transfermarkt_data <- gather_transfermarkt_data(urls_tm, player_jsons, is_current_season)
       } else {
         load(transfermarkt_data_cache)
-        flog.info("Loaded player_jsons from cache")
+        flog.info("Loaded transfermarkt_data from cache")
       }
       
       aggregated_transfermarkt_data <- aggregate_transfermarkt_data(transfermarkt_data)
