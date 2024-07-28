@@ -26,6 +26,7 @@ aggregate_football_data <- function(football_data) {
               Schotenopdoelsom = Schotenopdoelvoor + Schotenopdoeltegen,
               Aantalwedstrijden = max(Aantalwedstrijden)) %>%
     ungroup() %>%
+    select(-c(Doelpuntenvoor, Doelpuntentegen, Schotenvoor, Schotentegen, Schotenopdoelvoor, Schotenopdoeltegen)) %>%
     rename("Team" = "HomeTeam") %>%
     mutate(Team = mgsub(as.character(Team), namen$Footballdata, namen$Transfermarkt))
     

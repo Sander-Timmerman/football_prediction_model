@@ -1,4 +1,4 @@
-create_models <- function(all_models_cache, aggregated_transfermarkt_data_cache, player_jsons_cache, football_data, aggregated_football_data) {
+create_models <- function(all_models_cache, aggregated_transfermarkt_data_cache, transfermarkt_data_cache, player_jsons_cache, football_data, aggregated_football_data) {
   if(is.null(all_models_cache)) {
     if(is.null(aggregated_transfermarkt_data_cache)) {
       flog.info("Starts gathering and aggregating data from Transfermarkt from previous seasons")
@@ -15,7 +15,12 @@ create_models <- function(all_models_cache, aggregated_transfermarkt_data_cache,
         load(player_jsons_cache)
         flog.info("Loaded player_jsons from cache")
       }
-      transfermarkt_data <- gather_transfermarkt_data(urls_tm, player_jsons, current_season = FALSE)
+      if(is.null(transfermarkt_data_cache)) {
+        transfermarkt_data <- gather_transfermarkt_data(urls_tm, player_jsons, current_season = FALSE)
+      } else {
+        load(transfermarkt_data_cache)
+        flog.info("Loaded player_jsons from cache")
+      }
       
       aggregated_transfermarkt_data <- aggregate_transfermarkt_data(transfermarkt_data)
       save(aggregated_transfermarkt_data, file = paste0("cache/aggregated_transfermarkt_data_",

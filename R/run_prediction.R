@@ -1,6 +1,7 @@
 run_prediction <- function(aggregated_football_data_cache = NULL, 
                            all_models_cache = NULL, 
-                           player_jsons_cache = NULL, 
+                           player_jsons_cache = NULL,
+                           transfermarkt_data_cache = NULL,
                            aggregated_transfermarkt_data_cache = NULL, 
                            aggregated_transfermarkt_data_new_cache = NULL,
                            n_sims = 10000,
@@ -14,7 +15,6 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
     
     football_data <- combine_football_data_from_two_levels()
     aggregated_football_data <- aggregate_football_data(football_data)
-    
     save(aggregated_football_data, file = paste0("cache/aggregated_football_data_",
                                                  Sys.Date(),
                                                  ".RData"))
@@ -23,7 +23,7 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
     flog.info("Loaded aggregated data from football_data from previous seasons from cache")
   }
   
-  all_models <- create_models(all_models_cache, aggregated_transfermarkt_data_cache, player_jsons_cache, football_data, aggregated_football_data)
+  all_models <- create_models(all_models_cache, aggregated_transfermarkt_data_cache, transfermarkt_data_cache, player_jsons_cache, football_data, aggregated_football_data)
     
   namen <- read.csv("input/namen.csv")
   
