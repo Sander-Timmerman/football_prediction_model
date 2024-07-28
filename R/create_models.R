@@ -12,9 +12,10 @@ create_models <- function(all_models_cache, aggregated_transfermarkt_data_cache,
       if(is.null(player_jsons_cache)) {
         player_jsons <- list()
       } else {
-        player_jsons <- load(player_jsons_cache)
+        load(player_jsons_cache)
+        flog.info("Loaded player_jsons from cache")
       }
-      transfermarkt_data <- gather_transfermarkt_data(urls_tm, player_jsons_cache, current_season = FALSE)
+      transfermarkt_data <- gather_transfermarkt_data(urls_tm, player_jsons, current_season = FALSE)
       
       aggregated_transfermarkt_data <- aggregate_transfermarkt_data(transfermarkt_data)
       save(aggregated_transfermarkt_data, file = paste0("cache/aggregated_transfermarkt_data_",

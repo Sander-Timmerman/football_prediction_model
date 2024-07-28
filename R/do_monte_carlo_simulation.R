@@ -15,6 +15,8 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, n_si
     all_teams <- unique(prediction_competition$Team)
     n_teams <- length(all_teams)
     
+    current_standings[18, "Punten"] <- current_standings[18, "Punten"] - 18
+    
     matches_to_simulate <- expand.grid(HomeTeam = all_teams, AwayTeam = all_teams, stringsAsFactors = FALSE) %>%
       filter(HomeTeam != AwayTeam) %>%
       mutate(Match = paste(HomeTeam, AwayTeam)) %>%
