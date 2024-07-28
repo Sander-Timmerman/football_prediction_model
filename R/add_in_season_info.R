@@ -5,7 +5,7 @@ add_in_season_info <- function(model_input, aggregated_football_data_passed) {
                                            by = c("Team" = "Team",
                                                   "Competitie" = "Competitie",
                                                   "Seizoen" = "Seizoen"))
-  colnames(model_input_with_in_season)[(ncol_orig + 1) : (ncol_orig + 16)] <- paste0(colnames(model_input_with_in_season)[(ncol_orig + 1) : (ncol_orig + 16)],
+  colnames(model_input_with_in_season)[(ncol_orig + 1) : (ncol(model_input_with_in_season) - 1)] <- paste0(colnames(model_input_with_in_season)[(ncol_orig + 1) : (ncol(model_input_with_in_season) - 1)],
                                                           "_in_seizoen")
   return(model_input_with_in_season)
 }
