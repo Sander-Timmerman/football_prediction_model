@@ -9,32 +9,32 @@ find_data_urls <- function(data_source_info, source, is_current_season) {
                      ". This competition will be ignored"))
     data_source_info <- filter(data_source_info, Start < 25)
   }
-  all_competitions <- NULL
-  all_seasons <- NULL
-  all_levels <- NULL
-  all_urls <- NULL
+  all_competitions <- character(0)
+  all_seasons <- integer(0)
+  all_levels <- integer(0)
+  all_urls <- character(0)
   
   for(row in seq_len(nrow(data_source_info))) {
-    start_season <- ifelse(is_current_season,
-                           25,
-                           data_source_info[row, "Start"])
-    end_season <- ifelse(is_current_season, 25, 24)
+    competition <- data_source_info[row, "Competitie"]
+    code <- data_source_info[row, paste0("Code_", source)]
+    start_season <- if(is_current_season) 25 else data_source_info[row, "Start"]
+    end_season <- if(is_current_season) 25 else 24
     for(season in start_season : end_season) {
       for(level in 1 : 2) {
-        competition <- data_source_info[row, "Competitie"]
-        code <- data_source_info[row, paste0("Code_", source)]
-        url <- ifelse(source == "football_data",
-                      paste0("https://www.football-data.co.uk/mmz4281/", 
-                             season - 1, 
-                             season,
-                             "/",
-                             code,
-                             ifelse(competition == "Engeland", level - 1, level),
-                             ".csv"),
-                      paste0("https://www.transfermarkt.com/jumplist/startseite/wettbewerb/",
-                             code,
-                             "1/plus/?saison_id=20",
-                             season - 1))
+         url <- if(source == "football_data") {
+           paste0("https://www.football-data.co.uk/mmz4281/", 
+                  season - 1, 
+                  season,
+                  "/",
+                  code,
+                  if(competition == "Engeland") level - 1 else level,
+                  ".csv")
+         } else {
+           paste0("https://www.transfermarkt.com/jumplist/startseite/wettbewerb/",
+                  code,
+                  "1/plus/?saison_id=20",
+                  season - 1) 
+         }
         all_competitions <- c(all_competitions, competition)
         all_seasons <- c(all_seasons, season)
         all_levels <- c(all_levels, level)
