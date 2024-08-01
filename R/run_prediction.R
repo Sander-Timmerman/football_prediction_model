@@ -16,7 +16,7 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
       flog.warn("aggregated_football_data_cache is ignored because all_models_cache is empty")
     }
     
-    urls_fd <- find_data_urls(data_source_info, "football_data", is_current_season)
+    urls_fd <- find_data_urls(data_source_info, "football_data", is_current_season, 25)
     football_data <- gather_football_data(urls_fd)
     aggregated_football_data <- aggregate_football_data(football_data)
     save(aggregated_football_data, file = paste0("cache/aggregated_football_data_",
@@ -48,12 +48,12 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
   }
   
   flog.info("Starts gathering and aggregating data from football_data from current season")
-  urls_fd_new <- find_data_urls(data_source_info, "football_data", is_current_season)
+  urls_fd_new <- find_data_urls(data_source_info, "football_data", is_current_season, 25)
   football_data_new <- gather_football_data(urls_fd_new)
   aggregated_football_data_new <- aggregate_football_data(football_data_new)
-  aggregated_level_two_data <- aggregate_level_two_final_standings()
-  
+  aggregated_level_two_data <- aggregate_level_two_final_standings(data_source_info, is_current_season)
   prediction <- create_current_season_prediction(aggregated_football_data, aggregated_transfermarkt_data_new, aggregated_football_data_new, aggregated_level_two_data, all_models)
+  
   next_game_round_prediction <- predict_next_game_round(prediction)
   
   results_table <- do_monte_carlo_simulation(prediction, football_data_new, namen, n_sims, write_results)

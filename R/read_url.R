@@ -5,8 +5,10 @@ read_url <- function(url, use_rvest = TRUE) {
     pagina <- tryCatch(
       {
         if(use_rvest) {
-          read_html(url)
-        } else readLines(url)
+          page <- read_html(url)
+        } else page <- readLines(url)
+        flog.debug(paste("Succesfully read url", url))
+        return(page)
       },
       error = function(cond) {
         flog.warn(paste("Poging om url", url, "te lezen mislukt"))

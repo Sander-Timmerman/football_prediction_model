@@ -1,13 +1,17 @@
-find_data_urls <- function(data_source_info, source, is_current_season) {
+find_data_urls <- function(data_source_info, source, is_current_season, current_season, page = "startseite", level_start = 1) {
   if(!source %in% c("football_data", "transfermarkt")) {
     flog.error(paste0("Data source ", source, " is unknown, returning empty dataframe"))
     return(data.frame())
   }
-  if(any(data_source_info$Start >= 25)) {
+  if(level_start < 1 | level_start > 2) {
+    flog.error(paste0("Start level ", level_start, " is invalid, returning empty dataframe"))
+    return(data.frame())
+  }
+  if(any(data_source_info$Start >= current_season)) {
     flog.warn(paste0("Invalid start season in competition ", 
-                     data_source_info[which(data_source_info$Start >= 25), "Competitie"],
+                     data_source_info[which(data_source_info$Start >= current_season), "Competitie"],
                      ". This competition will be ignored"))
-    data_source_info <- filter(data_source_info, Start < 25)
+    data_source_info <- filter(data_source_info, Start < current_season)
   }
   all_competitions <- character(0)
   all_seasons <- integer(0)
@@ -17,10 +21,10 @@ find_data_urls <- function(data_source_info, source, is_current_season) {
   for(row in seq_len(nrow(data_source_info))) {
     competition <- data_source_info[row, "Competitie"]
     code <- data_source_info[row, paste0("Code_", source)]
-    start_season <- if(is_current_season) 25 else data_source_info[row, "Start"]
-    end_season <- if(is_current_season) 25 else 24
+    start_season <- if(is_current_season) current_season else data_source_info[row, "Start"]
+    end_season <- if(is_current_season) current_season else (current_season - 1)
     for(season in start_season : end_season) {
-      for(level in 1 : 2) {
+      for(level in level_start : 2) {
          url <- if(source == "football_data") {
            paste0("https://www.football-data.co.uk/mmz4281/", 
                   season - 1, 
@@ -30,9 +34,12 @@ find_data_urls <- function(data_source_info, source, is_current_season) {
                   if(competition == "Engeland") level - 1 else level,
                   ".csv")
          } else {
-           paste0("https://www.transfermarkt.com/jumplist/startseite/wettbewerb/",
+           paste0("https://www.transfermarkt.com/jumplist/", 
+                  page, 
+                  "/wettbewerb/",
                   code,
-                  "1/plus/?saison_id=20",
+                  level, 
+                  "/plus/?saison_id=20",
                   season - 1) 
          }
         all_competitions <- c(all_competitions, competition)

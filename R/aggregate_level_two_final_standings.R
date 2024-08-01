@@ -1,5 +1,5 @@
-aggregate_level_two_final_standings <- function() {
-  aggregated_level_two_data <- read.csv("input/eindstand.csv") %>%
+aggregate_level_two_final_standings <- function(data_source_info, is_current_season) {
+  aggregated_level_two_data <- gather_level_two_final_standings(data_source_info, is_current_season) %>%
     group_by(Competitie, Seizoen) %>%
     mutate(Niveau = 2,
            Punten = Punten / Aantalwedstrijden,

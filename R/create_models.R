@@ -14,7 +14,7 @@ create_models <- function(all_models_cache, aggregated_transfermarkt_data_cache,
           filter(Niveau == 1) %>%
           select(Competitie, Seizoen, Startdatum) %>%
           distinct()
-        urls_tm <- find_data_urls(data_source_info, "transfermarkt", is_current_season) %>%
+        urls_tm <- find_data_urls(data_source_info, "transfermarkt", is_current_season, 25, "startseite", 1) %>%
           inner_join(df_startdatums, by = c("Competitie", "Seizoen"))
         transfermarkt_data <- gather_transfermarkt_data(urls_tm, player_jsons, is_current_season)
       } else {
