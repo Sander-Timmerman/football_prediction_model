@@ -1,13 +1,6 @@
 do_monte_carlo_simulation <- function(prediction, football_data_new, namen, n_sims, write_results) {
-  for (competition in unique(prediction$Competitie)) {
+  for(competition in unique(prediction$Competitie)) {
     flog.info(paste0("Starting Monte Carlo simulation for competition ", competition))
-    played_matches <- football_data_new[seq(1, nrow(football_data_new), 2),] %>%
-      filter(Competitie == competition) %>%
-      select(HomeTeam, AwayTeam, FTHG, FTAG, HPts, APts) %>%
-      mutate(HomeTeam = mgsub(as.character(HomeTeam), namen$Footballdata, namen$Transfermarkt),
-             AwayTeam = mgsub(as.character(AwayTeam), namen$Footballdata, namen$Transfermarkt))
-    current_standings <- played_matches %>%
-      calculate_standings()
     
     prediction_competition <- prediction %>%
       filter(Competitie == competition) %>%
@@ -15,8 +8,16 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, n_si
     all_teams <- unique(prediction_competition$Team)
     n_teams <- length(all_teams)
     
-    current_standings[18, "Punten"] <- current_standings[18, "Punten"] - 18
+    played_matches <- football_data_new[seq(1, nrow(football_data_new), 2),] %>%
+      filter(Competitie == competition) %>%
+      select(HomeTeam, AwayTeam, FTHG, FTAG, HPts, APts) %>%
+      mutate(HomeTeam = mgsub(as.character(HomeTeam), namen$Footballdata, namen$Transfermarkt),
+             AwayTeam = mgsub(as.character(AwayTeam), namen$Footballdata, namen$Transfermarkt))
     
+    current_standings <- calculate_standings(played_matches) %>%
+      right_join(data.frame(Team = all_teams))
+    current_standings[is.na(current_standings)] <- 0
+
     matches_to_simulate <- expand.grid(HomeTeam = all_teams, AwayTeam = all_teams, stringsAsFactors = FALSE) %>%
       filter(HomeTeam != AwayTeam) %>%
       mutate(Match = paste(HomeTeam, AwayTeam)) %>%
