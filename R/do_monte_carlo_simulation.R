@@ -49,8 +49,8 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, n_si
     results_table <- create_results_table(all_simulations, n_sims, prediction_competition)
     if(write_results) {
       write.xlsx(results_table, paste0("output/results_table_", competition, "_on_", Sys.Date(), ".xlsx"))
+      flog.info(paste0("Written results table for competition ", competition, " in the output folder"))
     }
-    flog.info(paste0("Written results table for competition ", competition, "in the output folder"))
   }
   return(results_table)
 }
