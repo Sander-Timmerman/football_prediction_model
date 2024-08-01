@@ -4,6 +4,7 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
                            transfermarkt_data_cache = NULL,
                            aggregated_transfermarkt_data_cache = NULL, 
                            aggregated_transfermarkt_data_new_cache = NULL,
+                           all_final_standings_cache = NULL,
                            n_sims = 10000,
                            write_results = TRUE) {
   data_source_info <- read.csv("input/data_source_info.csv", stringsAsFactors = FALSE)
@@ -51,7 +52,7 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
   urls_fd_new <- find_data_urls(data_source_info, "football_data", is_current_season, 25)
   football_data_new <- gather_football_data(urls_fd_new)
   aggregated_football_data_new <- aggregate_football_data(football_data_new)
-  aggregated_level_two_data <- aggregate_level_two_final_standings(data_source_info, is_current_season)
+  aggregated_level_two_data <- aggregate_level_two_final_standings(all_final_standings_cache, data_source_info, is_current_season)
   prediction <- create_current_season_prediction(aggregated_football_data, aggregated_transfermarkt_data_new, aggregated_football_data_new, aggregated_level_two_data, all_models)
   
   next_game_round_prediction <- predict_next_game_round(prediction)
