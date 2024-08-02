@@ -34,7 +34,7 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
   
   if(is.null(aggregated_transfermarkt_data_new_cache)) {
     flog.info("Starts gathering and aggregating data from Transfermarkt from current season")
-    urls_tm_new <- find_data_urls(data_source_info, "transfermarkt", is_current_season)
+    urls_tm_new <- find_data_urls(data_source_info, "transfermarkt", is_current_season, 25)
     urls_tm_new$Startdatum <- Sys.Date()
     transfermarkt_data_new <- gather_transfermarkt_data(urls_tm_new, is_current_season = is_current_season)
     aggregated_transfermarkt_data_new <- aggregate_transfermarkt_data(transfermarkt_data_new)
