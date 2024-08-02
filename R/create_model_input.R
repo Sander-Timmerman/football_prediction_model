@@ -1,13 +1,10 @@
-create_model_input <- function(aggregated_football_data, aggregated_transfermarkt_data, aggregated_football_data_to_come = NULL, is_new_data) {
+create_model_input <- function(aggregated_football_data, aggregated_transfermarkt_data, aggregated_football_data_to_come, is_new_data) {
   aggregated_football_data_last_season <- aggregated_football_data %>%
     mutate(Seizoen = Seizoen + 1) %>%
     select(-Aantalwedstrijden)
   first_data_column <- 4
   
   if(!is_new_data) {
-    if(is.null(aggregated_football_data_to_come)) {
-      aggregated_football_data_to_come <- aggregated_football_data
-    }
     aggregated_football_data_this_season <- aggregated_football_data_to_come %>%
       filter(Niveau == 1) %>%
       select(Team, Competitie, Seizoen, Punten, Doelsom)

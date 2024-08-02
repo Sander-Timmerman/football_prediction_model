@@ -6,13 +6,13 @@ train_models <- function(football_data, aggregated_football_data, aggregated_tra
       football_data_to_come <- football_data %>%
         filter(Aantal > game_round)
       aggregated_football_data_to_come <- aggregate_football_data(football_data_to_come)
-      model_input <- create_model_input(aggregated_football_data, aggregated_transfermarkt_data, aggregated_football_data_to_come)
+      model_input <- create_model_input(aggregated_football_data, aggregated_transfermarkt_data, aggregated_football_data_to_come, is_new_data = FALSE)
       
       football_data_passed <- football_data %>%
         filter(Aantal <= game_round)
       aggregated_football_data_passed <- aggregate_football_data(football_data_passed)
       model_input <- add_in_season_info(model_input, aggregated_football_data_passed)
-    } else model_input <- create_model_input(aggregated_football_data, aggregated_transfermarkt_data)
+    } else model_input <- create_model_input(aggregated_football_data, aggregated_transfermarkt_data, aggregated_football_data, is_new_data = FALSE)
     
     all_models[[game_round + 1]] <- create_models_for_game_round(model_input)
   }
