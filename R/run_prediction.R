@@ -8,7 +8,9 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
                            n_sims = 10000,
                            write_results = TRUE) {
   data_source_info <- read.csv("input/data_source_info.csv", stringsAsFactors = FALSE)
-  namen <- read.csv("input/all_club_names.csv")
+  namen <- read.csv("input/all_club_names.csv", stringsAsFactors = FALSE)
+  namen[namen == "AS Saint-É\u0090tienne"] <- "AS Saint-Étienne"
+  
   is_current_season <- FALSE
   
   if(is.null(aggregated_football_data_cache) | is.null(all_models_cache)) {
