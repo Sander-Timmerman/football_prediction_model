@@ -1,4 +1,5 @@
-run_prediction <- function(aggregated_football_data_cache = NULL, 
+run_prediction <- function(football_data_cache = NULL,
+                           aggregated_football_data_cache = NULL, 
                            all_models_cache = NULL, 
                            player_jsons_cache = NULL,
                            transfermarkt_data_cache = NULL,
@@ -9,27 +10,35 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
                            write_results = TRUE) {
   data_source_info <- read.csv("input/data_source_info.csv", stringsAsFactors = FALSE)
   namen <- read.csv("input/all_club_names.csv", stringsAsFactors = FALSE, fileEncoding = "UTF-8")
+  if(is.null(all_models_cache) & !(is.null(aggregated_football_data_cache))) {
+    aggregated_football_data_cache <- NULL
+    flog.warn("Because all_models_cache is empty, aggregated_football_data_cache will not be used")
+  }
   
   is_current_season <- FALSE
   
-  if(is.null(aggregated_football_data_cache) | is.null(all_models_cache)) {
-    flog.info("Starts gathering and aggregating data from football_data from previous seasons")
-    if(!(is.null(aggregated_football_data_cache))) {
-      flog.warn("aggregated_football_data_cache is ignored because all_models_cache is empty")
-    }
-    
-    urls_fd <- find_data_urls(data_source_info, "football_data", is_current_season, 25)
-    football_data <- gather_football_data(urls_fd, namen)
-    aggregated_football_data <- aggregate_football_data(football_data, namen)
-    save(aggregated_football_data, file = paste0("cache/aggregated_football_data_",
-                                                 Sys.Date(),
-                                                 ".RData"))
-  } else {
-    load(aggregated_football_data_cache)
-    flog.info("Loaded aggregated data from football_data from previous seasons from cache")
-  }
-  
-  all_models <- create_models(all_models_cache, aggregated_transfermarkt_data_cache, transfermarkt_data_cache, player_jsons_cache, football_data, aggregated_football_data, data_source_info, is_current_season, namen)
+  urls_fd <- find_data_urls(data_source_info, "football_data", is_current_season, 25)
+  football_data <- use_function_with_caching(football_data_cache, 
+                                             "football_data", 
+                                             gather_football_data, 
+                                             urls_fd, 
+                                             namen)
+  aggregated_football_data <- use_function_with_caching(aggregated_football_data_cache, 
+                                                        "aggregated_football_data", 
+                                                        aggregate_football_data, 
+                                                        football_data, 
+                                                        namen)
+  all_models <- use_function_with_caching(all_models_cache, 
+                                          "all_models", 
+                                          create_models, 
+                                          aggregated_transfermarkt_data_cache, 
+                                          transfermarkt_data_cache, 
+                                          player_jsons_cache, 
+                                          football_data, 
+                                          aggregated_football_data, 
+                                          data_source_info, 
+                                          is_current_season, 
+                                          namen)
     
   is_current_season <- TRUE
   
