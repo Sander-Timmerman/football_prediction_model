@@ -1,7 +1,7 @@
 use_model_on_new_data <- function(aggregated_football_data, aggregated_transfermarkt_data_new, aggregated_football_data_new, all_models, with_shots) {
-  shots <- ifelse(with_shots, "with_shots", "without_shots")
-  
-  model_input <- create_model_input(aggregated_football_data, aggregated_transfermarkt_data_new, aggregated_football_data_new)
+  shots <- if(with_shots) "with_shots" else "without_shots"
+
+  model_input <- create_model_input(aggregated_football_data, aggregated_transfermarkt_data_new, is_new_data = TRUE)
   model_input <- add_in_season_info(model_input, aggregated_football_data_new)
   
   prediction <- data.frame()

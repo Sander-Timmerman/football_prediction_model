@@ -1,0 +1,284 @@
+,Football_data,Transfermarkt
+1,Arsenal,Arsenal FC
+2,Aston Villa,Aston Villa
+3,Cardiff,Cardiff City
+4,Chelsea,Chelsea FC
+5,Crystal Palace,Crystal Palace
+6,Everton,Everton FC
+7,Fulham,Fulham FC
+8,Hull,Hull City
+9,Liverpool,Liverpool FC
+10,Man City,Manchester City
+11,Man United,Manchester United
+12,Newcastle,Newcastle United
+13,Norwich,Norwich City
+14,Southampton,Southampton FC
+15,Stoke,Stoke City
+16,Sunderland,Sunderland AFC
+17,Swansea,Swansea City
+18,Tottenham,Tottenham Hotspur
+19,West Brom,West Bromwich Albion
+20,West Ham,West Ham United
+22,Burnley,Burnley FC
+23,Leicester,Leicester City
+24,QPR,Queens Park Rangers
+25,Bournemouth,AFC Bournemouth
+26,Watford,Watford FC
+27,Middlesbrough,Middlesbrough FC
+28,Brighton,Brighton & Hove Albion
+29,Huddersfield,Huddersfield Town
+30,Wolves,Wolverhampton Wanderers
+31,Sheffield United,Sheffield United
+32,Leeds,Leeds United
+33,Brentford,Brentford FC
+34,Nott'm Forest,Nottingham Forest
+35,Luton,Luton Town
+56,Augsburg,FC Augsburg
+57,Bayern Munich,Bayern Munich
+58,Braunschweig,Eintracht Braunschweig
+59,Dortmund,Borussia Dortmund
+60,Ein Frankfurt,Eintracht Frankfurt
+61,Freiburg,SC Freiburg
+62,Hamburg,Hamburger SV
+63,Hannover,Hannover 96
+64,Hertha,Hertha BSC
+65,Hoffenheim,TSG 1899 Hoffenheim
+66,Leverkusen,Bayer 04 Leverkusen
+67,M'gladbach,Borussia Mînchengladbach
+68,Mainz,1.FSV Mainz 05
+69,Nurnberg,1.FC Nuremberg
+70,Schalke 04,FC Schalke 04
+71,Stuttgart,VfB Stuttgart
+72,Werder Bremen,SV Werder Bremen
+73,Wolfsburg,VfL Wolfsburg
+83,FC Koln,1.FC Kˆln
+84,Paderborn,SC Paderborn 07
+86,Darmstadt,SV Darmstadt 98
+87,Ingolstadt,FC Ingolstadt 04
+89,RB Leipzig,RB Leipzig
+97,Fortuna Dusseldorf,Fortuna DÅsseldorf
+98,Union Berlin,1.FC Union Berlin
+99,Bielefeld,Arminia Bielefeld
+103,Stuttgart,VfB Stuttgart
+104,Bochum,VfL Bochum
+105,Greuther Furth,SpVgg Greuther FÅrth
+106,Bochum,VfL Bochum
+110,Darmstadt,SV Darmstadt 98
+111,Heidenheim,1.FC Heidenheim 1846
+130,Atalanta,Atalanta BC
+131,Bologna,Bologna FC 1909
+132,Cagliari,Cagliari Calcio
+133,Catania,Catania FC
+134,Chievo,Chievo Verona
+135,Fiorentina,ACF Fiorentina
+136,Genoa,Genoa CFC
+137,Inter,Inter Milan
+138,Juventus,Juventus FC
+139,Lazio,SS Lazio
+140,Livorno,US Livorno 1915
+141,Milan,AC Milan
+142,Napoli,SSC Napoli
+143,Parma,Parma Calcio 1913
+144,Roma,AS Roma
+145,Sampdoria,UC Sampdoria
+146,Sassuolo,US Sassuolo
+147,Torino,Torino FC
+148,Udinese,Udinese Calcio
+149,Verona,Hellas Verona
+162,Cesena,Cesena FC
+163,Empoli,FC Empoli
+164,Palermo,Palermo FC
+166,Carpi,AC Carpi
+167,Frosinone,Frosinone Calcio
+173,Crotone,FC Crotone
+174,Pescara,Delfino Pescara 1936
+175,Crotone,FC Crotone
+176,Benevento,Benevento Calcio
+177,Spal,SPAL
+179,Brescia,Brescia Calcio
+180,Lecce,US Lecce
+181,Spezia,Spezia Calcio
+182,Salernitana,US Salernitana 1919
+183,Venezia,Venezia FC
+187,Cremonese,US Cremonese
+188,Monza,AC Monza
+212,Almeria,UD Almer°a
+213,Ath Bilbao,Athletic Bilbao
+214,Ath Madrid,AtlÇtico de Madrid
+215,Barcelona,FC Barcelona
+216,Betis,Real Betis BalompiÇ
+217,Celta,Celta de Vigo
+218,Elche,Elche CF
+219,Espanol,RCD Espanyol Barcelona
+220,Getafe,Getafe CF
+221,Granada,Granada CF
+222,Levante,Levante UD
+223,Malaga,M†laga CF
+224,Osasuna,CA Osasuna
+225,Real Madrid,Real Madrid
+226,Sevilla,Sevilla FC
+227,Sociedad,Real Sociedad
+228,Valencia,Valencia CF
+229,Valladolid,Real Valladolid CF
+230,Vallecano,Rayo Vallecano
+231,Villarreal,Villarreal CF
+236,Cordoba,C¢rdoba CF
+237,Eibar,SD Eibar
+238,La Coruna,Deportivo de La CoruÒa
+246,Las Palmas,UD Las Palmas
+247,Sp Gijon,Sporting Gij¢n
+248,Barcelona,CA Osasuna
+249,Betis,Celta de Vigo
+250,Valencia,Valencia CF
+251,Alaves,Deportivo AlavÇs
+252,Leganes,CD LeganÇs
+258,Girona,Girona FC
+263,Huesca,SD Huesca
+268,Mallorca,RCD Mallorca
+275,Cadiz,C†diz CF
+300,Ajaccio,AC Ajaccio
+301,Bastia,SC Bastia
+302,Bordeaux,FC Girondins Bordeaux
+303,Evian Thonon Gaillard,Thonon êvian Grand Genäve FC
+304,Guingamp,EA Guingamp
+305,Lille,LOSC Lille
+306,Lorient,FC Lorient
+307,Lyon,Olympique Lyon
+308,Marseille,Olympique Marseille
+309,Monaco,AS Monaco
+310,Montpellier,Montpellier HSC
+311,Nantes,FC Nantes
+312,Nice,OGC Nice
+313,Paris SG,Paris Saint-Germain
+314,Reims,Stade Reims
+315,Rennes,Stade Rennais FC
+316,Sochaux,FC Sochaux-MontbÇliard
+317,St Etienne,AS Saint-êtienne
+318,Toulouse,FC Toulouse
+319,Valenciennes,Valenciennes FC
+329,Caen,SM Caen
+330,Lens,RC Lens
+331,Metz,FC Metz
+339,Ajaccio GFCO,GFC Ajaccio
+340,Angers,Angers SCO
+341,Troyes,ESTAC Troyes
+345,Dijon,Dijon FCO
+346,Nancy,AS Nancy-Lorraine
+361,Amiens,Amiens SC
+362,Strasbourg,RC Strasbourg Alsace
+364,Nimes,Nåmes Olympique
+367,Brest,Stade Brestois 29
+372,Clermont,Clermont Foot 63
+374,Auxerre,AJ Auxerre
+375,Le Havre,Le Havre AC
+394,Ajax,Ajax Amsterdam
+395,AZ Alkmaar,AZ Alkmaar
+396,Den Haag,ADO Den Haag
+397,Excelsior,Excelsior Rotterdam
+398,Feyenoord,Feyenoord Rotterdam
+399,Groningen,FC Groningen
+400,Heerenveen,SC Heerenveen
+401,Heracles,Heracles Almelo
+402,NAC Breda,NAC Breda
+403,PSV Eindhoven,PSV Eindhoven
+404,Roda,Roda JC Kerkrade
+405,Sparta Rotterdam,Sparta Rotterdam
+406,Twente,Twente Enschede FC
+407,Utrecht,FC Utrecht
+408,Vitesse,Vitesse Arnhem
+409,VVV Venlo,VVV-Venlo
+410,Willem II,Willem II Tilburg
+411,Zwolle,PEC Zwolle
+414,FC Emmen,FC Emmen
+415,For Sittard,Fortuna Sittard
+416,Graafschap,De Graafschap Doetinchem
+419,For Sittard,Fortuna Sittard
+420,Waalwijk,RKC Waalwijk
+424,Cambuur,SC Cambuur Leeuwarden
+425,Go Ahead Eagles,Go Ahead Eagles
+426,Nijmegen,NEC Nijmegen
+432,Volendam,FC Volendam
+437,Almere City,Almere City FC
+456,Anderlecht,RSC Anderlecht
+457,Antwerp,Royal Antwerp FC
+458,Charleroi,R Charleroi SC
+459,Club Brugge,Club Brugge KV
+460,Eupen,KAS Eupen
+461,Genk,KRC Genk
+462,Gent,KAA Gent
+463,Kortrijk,KV Kortrijk
+464,Lokeren,KSC Lokeren (- 2020)
+465,Mechelen,KV Mechelen
+466,Mouscron,Royal Excel Mouscron (-2022)
+467,Oostende,KV Oostende (-2024)
+468,St Truiden,Sint-Truidense VV
+469,Standard,Standard Liäge
+470,Waasland-Beveren,SK Beveren
+471,Waregem,Zulte Waregem
+475,Cercle Brugge,Cercle Brugge 
+478,Beerschot VA,Beerschot VA
+479,Oud-Heverlee Leuven,Oud-Heverlee Leuven
+481,Seraing,RFC Seraing
+482,St. Gilloise,Union Saint-Gilloise
+483,Westerlo,KVC Westerlo
+487,RWD Molenbeek,RWD Molenbeek
+490,Dender,FCV Dender EH
+491,Aves,Desportivo Aves (- 2020)
+492,Belenenses,CF Os Belenenses
+493,Benfica,SL Benfica
+494,Boavista,Boavista FC
+495,Chaves,GD Chaves
+496,Estoril,GD Estoril Praia
+497,Feirense,CD Feirense
+498,Guimaraes,Vit¢ria Guimar∆es SC
+499,Maritimo,CS Mar°timo
+500,Moreirense,Moreirense FC
+501,Pacos Ferreira,FC Paáos de Ferreira
+502,Portimonense,Portimonense SC
+503,Porto,FC Porto
+504,Rio Ave,Rio Ave FC
+505,Setubal,Vit¢ria Set£bal FC
+506,Sp Braga,SC Braga
+507,Sp Lisbon,Sporting CP
+508,Tondela,CD Tondela
+522,Nacional,CD Nacional
+523,Santa Clara,CD Santa Clara
+531,Famalicao,FC Famalic∆o
+532,Gil Vicente,Gil Vicente FC
+534,Farense,SC Farense
+539,Arouca,FC Arouca
+540,Vizela,FC Vizela
+544,Casa Pia,Casa Pia AC
+549,Estrela,CF Estrela Amadora
+568,Akhisar Belediyespor,Akhisarspor
+569,Alanyaspor,Alanyaspor
+570,Antalyaspor,Antalyaspor
+571,Besiktas,Besiktas JK
+572,Bursaspor,Bursaspor
+573,Buyuksehyr,Basaksehir FK
+574,Fenerbahce,Fenerbahce
+575,Galatasaray,Galatasaray
+576,Genclerbirligi,Genclerbirligi Ankara
+577,Goztep,Gîztepe
+578,Karabukspor,Kardemir KarabÅkspor
+579,Kasimpasa,Kasimpasa
+580,Kayserispor,Kayserispor
+581,Konyaspor,Konyaspor
+582,Osmanlispor,Ankaraspor
+583,Sivasspor,Sivasspor
+584,Trabzonspor,Trabzonspor
+585,Yeni Malatyaspor,Yeni Malatyaspor
+596,Ankaragucu,MKE AnkaragÅcÅ
+597,Erzurum BB,Erzurumspor FK
+598,Rizespor,Caykur Rizespor
+600,Denizlispor,Denizlispor
+601,Gaziantep,Gaziantep FK
+602,Hatayspor,Hatayspor
+603,Karagumruk,Fatih KaragÅmrÅk
+605,Ad. Demirspor,Adana Demirspor
+606,Altay,Altay SK
+607,Giresunspor,Giresunspor
+609,Istanbulspor,Istanbulspor
+610,Umraniyespor,ömraniyespor
+611,Pendikspor,Pendikspor
+612,Samsunspor,Samsunspor
