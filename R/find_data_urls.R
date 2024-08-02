@@ -25,7 +25,9 @@ find_data_urls <- function(data_source_info, source, is_current_season, current_
     end_season <- if(is_current_season) current_season else (current_season - 1)
     for(season in start_season : end_season) {
       for(level in level_start : 2) {
-         url <- if(source == "football_data") {
+        level_two <- data_source_info[row, "Twee"]
+        if(level_two & level_start == 2) break
+        url <- if(source == "football_data") {
            paste0("https://www.football-data.co.uk/mmz4281/", 
                   season - 1, 
                   season,
@@ -47,7 +49,6 @@ find_data_urls <- function(data_source_info, source, is_current_season, current_
         all_levels <- c(all_levels, level)
         all_urls <- c(all_urls, url)
         
-        level_two <- data_source_info[row, "Twee"]
         if(!level_two | source == "transfermarkt" | is_current_season) break
       }
     }
