@@ -1,9 +1,10 @@
-gather_football_data <- function(urls_fd) {
+gather_football_data <- function(urls_fd, namen) {
   flog.info("Starts gathering data from football_data")
   all_data <- data.frame()
   for (i in seq_len(nrow(urls_fd))) {
     df_football_data <- read_football_data_csv(as.character(urls_fd[i, 4]),
-                                               as.character(urls_fd[i, 1]))
+                                               as.character(urls_fd[i, 1]),
+                                               as.character(urls_fd[i, 2]))
     if(nrow(df_football_data) > 0) {
       start_date <- determine_start_date(df_football_data)
       if(is.na(start_date)) {
@@ -19,5 +20,13 @@ gather_football_data <- function(urls_fd) {
       all_data <- rbind(all_data, temp_data)
     }
   }
+  
+  if(any((!all_data$HomeTeam %in% namen$Football_data |
+          !all_data$AwayTeam %in% namen$Football_data) &
+         all_data$Niveau == 1)) {
+    flog.warn("At least one team has an unknown name in football_data. This might cause problems when joining with Transfermarkt data")
+  }
+  
+  flog.info("Finished gathering football data")
   return(all_data)
 }

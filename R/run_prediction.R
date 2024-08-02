@@ -8,7 +8,7 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
                            n_sims = 10000,
                            write_results = TRUE) {
   data_source_info <- read.csv("input/data_source_info.csv", stringsAsFactors = FALSE)
-  
+  namen <- read.csv("input/all_club_names.csv")
   is_current_season <- FALSE
   
   if(is.null(aggregated_football_data_cache) | is.null(all_models_cache)) {
@@ -18,8 +18,8 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
     }
     
     urls_fd <- find_data_urls(data_source_info, "football_data", is_current_season, 25)
-    football_data <- gather_football_data(urls_fd)
-    aggregated_football_data <- aggregate_football_data(football_data)
+    football_data <- gather_football_data(urls_fd, namen)
+    aggregated_football_data <- aggregate_football_data(football_data, namen)
     save(aggregated_football_data, file = paste0("cache/aggregated_football_data_",
                                                  Sys.Date(),
                                                  ".RData"))
@@ -30,7 +30,6 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
   
   all_models <- create_models(all_models_cache, aggregated_transfermarkt_data_cache, transfermarkt_data_cache, player_jsons_cache, football_data, aggregated_football_data, data_source_info, is_current_season)
     
-  namen <- read.csv("input/namen.csv")
   is_current_season <- TRUE
   
   if(is.null(aggregated_transfermarkt_data_new_cache)) {
@@ -50,8 +49,8 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
   
   flog.info("Starts gathering and aggregating data from football_data from current season")
   urls_fd_new <- find_data_urls(data_source_info, "football_data", is_current_season, 25)
-  football_data_new <- gather_football_data(urls_fd_new)
-  aggregated_football_data_new <- aggregate_football_data(football_data_new)
+  football_data_new <- gather_football_data(urls_fd_new, namen)
+  aggregated_football_data_new <- aggregate_football_data(football_data_new, namen)
   aggregated_level_two_data <- aggregate_level_two_final_standings(all_final_standings_cache, data_source_info, is_current_season)
   prediction <- create_current_season_prediction(aggregated_football_data, aggregated_transfermarkt_data_new, aggregated_football_data_new, aggregated_level_two_data, all_models)
   

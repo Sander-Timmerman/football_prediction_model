@@ -1,6 +1,6 @@
-aggregate_football_data <- function(football_data) {
+aggregate_football_data <- function(football_data, namen) {
   flog.info("Starts aggregating data from football_data")
-  namen <- read.csv("input/namen.csv")
+
   aggregated_football_data <- football_data %>%
     group_by(Competitie, Seizoen, Niveau) %>%
     mutate(Gemiddeldegoals = mean(FTHG),
@@ -28,7 +28,7 @@ aggregate_football_data <- function(football_data) {
     ungroup() %>%
     select(-c(Doelpuntenvoor, Doelpuntentegen, Schotenvoor, Schotentegen, Schotenopdoelvoor, Schotenopdoeltegen)) %>%
     rename("Team" = "HomeTeam") %>%
-    mutate(Team = mgsub(as.character(Team), namen$Footballdata, namen$Transfermarkt))
-    
+    mutate(Team = mgsub(as.character(Team), namen$Football_data, namen$Transfermarkt))
+  flog.info("Finished aggregating data from football_data")
   return(aggregated_football_data)
 }
