@@ -28,7 +28,7 @@ run_prediction <- function(aggregated_football_data_cache = NULL,
     flog.info("Loaded aggregated data from football_data from previous seasons from cache")
   }
   
-  all_models <- create_models(all_models_cache, aggregated_transfermarkt_data_cache, transfermarkt_data_cache, player_jsons_cache, football_data, aggregated_football_data, data_source_info, is_current_season)
+  all_models <- create_models(all_models_cache, aggregated_transfermarkt_data_cache, transfermarkt_data_cache, player_jsons_cache, football_data, aggregated_football_data, data_source_info, is_current_season, namen)
     
   is_current_season <- TRUE
   
