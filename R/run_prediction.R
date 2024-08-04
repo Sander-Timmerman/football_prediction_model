@@ -3,8 +3,7 @@ run_prediction <- function(football_data_cache = NULL,
                            all_models_cache = NULL, 
                            player_jsons_cache = NULL,
                            transfermarkt_data_cache = NULL,
-                           aggregated_transfermarkt_data_cache = NULL, 
-                           aggregated_transfermarkt_data_new_cache = NULL,
+                           transfermarkt_data_new_cache = NULL,
                            all_final_standings_cache = NULL,
                            n_sims = 10000,
                            write_results = TRUE) {
@@ -30,8 +29,7 @@ run_prediction <- function(football_data_cache = NULL,
                                                         namen)
   all_models <- use_function_with_caching(all_models_cache, 
                                           "all_models", 
-                                          create_models, 
-                                          aggregated_transfermarkt_data_cache, 
+                                          create_models,
                                           transfermarkt_data_cache, 
                                           player_jsons_cache, 
                                           football_data, 
@@ -42,20 +40,15 @@ run_prediction <- function(football_data_cache = NULL,
     
   is_current_season <- TRUE
   
-  if(is.null(aggregated_transfermarkt_data_new_cache)) {
-    flog.info("Starts gathering and aggregating data from Transfermarkt from current season")
-    urls_tm_new <- find_data_urls(data_source_info, "transfermarkt", is_current_season, 25)
-    urls_tm_new$Startdatum <- Sys.Date()
-    transfermarkt_data_new <- gather_transfermarkt_data(urls_tm_new, is_current_season = is_current_season)
-    aggregated_transfermarkt_data_new <- aggregate_transfermarkt_data(transfermarkt_data_new)
-    
-    save(aggregated_transfermarkt_data_new, file = paste0("cache/aggregated_transfermarkt_data_new_",
-                                                          Sys.Date(),
-                                                          ".RData"))
-  } else {
-    load(aggregated_transfermarkt_data_new_cache)
-    flog.info("Loaded aggregated Transfermarkt data from current season from cache")
-  }
+  flog.info("Starts gathering and aggregating data from Transfermarkt from current season")
+  urls_tm_new <- find_data_urls(data_source_info, "transfermarkt", is_current_season, 25)
+  urls_tm_new$Startdatum <- Sys.Date()
+  transfermarkt_data_new <- use_function_with_caching(transfermarkt_data_new_cache,
+                                                      "transfermarkt_data_new",
+                                                      gather_transfermarkt_data,
+                                                      urls_tm_new,
+                                                      is_current_season = is_current_season)
+  aggregated_transfermarkt_data_new <- aggregate_transfermarkt_data(transfermarkt_data_new)
   
   flog.info("Starts gathering and aggregating data from football_data from current season")
   urls_fd_new <- find_data_urls(data_source_info, "football_data", is_current_season, 25)

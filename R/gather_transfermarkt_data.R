@@ -18,7 +18,7 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current
       player_urls <- html_nodes(webpage_club, ".inline-table a") %>% html_attr("href")
       slashes <- unlist(gregexpr("/", player_urls, fixed = TRUE))[seq(4, length(player_urls) * 4, 4)]
       player_ids <- as.character(substr(player_urls, slashes + 1, nchar(player_urls)))
-      date_column <- ifelse(is_current_season, "td:nth-child(7)", "td:nth-child(8)")
+      date_column <- if(is_current_season) "td:nth-child(7)" else "td:nth-child(8)"
       date_string <- html_nodes(webpage_club, date_column) %>%
         html_text() %>%
         parse_date_from_transfermarkt()
@@ -32,9 +32,14 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current
           if(is.null(player_jsons[[player_id]])) {
             player_jsons[[player_id]] <- read_url(url = paste0("https://www.transfermarkt.com/ceapi/marketValueDevelopment/graph/", player_id),
                                                   use_rvest = FALSE)
-            if(player_jsons[[player_id]] == "error") save(player_jsons, file = paste0("player_jsons_",
-                                                                                      Sys.Date(),
-                                                                                      ".RData"))
+            if(player_jsons[[player_id]] == "error") {
+              saveRDS(player_jsons, file = file.path("cache",
+                                                     paste0("player_jsons_",
+                                                            Sys.Date(),
+                                                            ".rds")))
+              flog.fatal("Loading of player info interrupted (lost internet connection?). Saved all the player pages requested so far")
+              stop("Loading of player info interrupted (lost internet connection?). Saved all the player pages requested so far")
+            }
           }
           market_value <- determine_market_value(player_jsons[[player_id]], start_date)
           market_values <- c(market_values, market_value)
@@ -50,10 +55,10 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current
       transfermarkt_data <- rbind(transfermarkt_data, temp_transfermarkt_data)
     }
   }
-  if(is_current_season) {
-    save(player_jsons, file = paste0("cache/player_jsons_",
-                                     Sys.Date(),
-                                     ".RData"))
+  if(!is_current_season) {
+    saveRDS(player_jsons, file = paste0("player_jsons_",
+                                        Sys.Date(),
+                                        ".rds"))
   }
   return(transfermarkt_data)
 }
