@@ -23,6 +23,7 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current
                                object_name = "player_jsons")
       club_name <- html_nodes(webpage_club, ".data-header__headline-wrapper--oswald") %>% html_text()
       club_name <- substr(club_name, 14, nchar(club_name) - 8)
+      flog.debug(paste0("Collecting data for club ", club_name))
       player_names <- html_nodes(webpage_club, ".inline-table a") %>% html_text()
       player_urls <- html_nodes(webpage_club, ".inline-table a") %>% html_attr("href")
       slashes <- unlist(gregexpr("/", player_urls, fixed = TRUE))[seq(4, length(player_urls) * 4, 4)]
