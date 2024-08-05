@@ -1,4 +1,4 @@
-gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current_season) {
+gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current_season, maanden) {
   flog.info("Starts gathering Transfermarkt data")
   transfermarkt_data <- NULL
   for(i in seq_len(nrow(urls_tm))) {
@@ -30,7 +30,7 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current
       date_column <- if(is_current_season) "td:nth-child(7)" else "td:nth-child(8)"
       date_string <- html_nodes(webpage_club, date_column) %>%
         html_text() %>%
-        parse_date_from_transfermarkt()
+        parse_date_from_transfermarkt(maanden)
       if(is_current_season) {
         market_values <- html_nodes(webpage_club, ".rechts.hauptlink") %>%
           html_text() %>%
@@ -45,7 +45,7 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current
                                                                    object_to_save = player_jsons, 
                                                                    object_name = "player_jsons"))
             }
-          market_value <- determine_market_value(player_jsons[[player_id]], start_date)
+          market_value <- determine_market_value(player_jsons[[player_id]], start_date, maanden)
           market_values <- c(market_values, market_value)
         }
       }
