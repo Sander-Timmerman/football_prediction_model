@@ -7,11 +7,19 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current
                      as.character(urls_tm[i, 1]), 
                      ", season ", 
                      as.character(urls_tm[i, 2])))
-    webpage <- read_url(competition_urls, use_rvest = TRUE)
+    webpage <- read_url(competition_urls, 
+                        use_rvest = TRUE,
+                        stop_if_failed = TRUE, 
+                        object_to_save = player_jsons, 
+                        object_name = "player_jsons")
     club_urls <- html_nodes(webpage, "#yw1 .no-border-links a:nth-child(1)") %>% html_attr("href")
     club_urls <- paste0("http://www.transfermarkt.com", gsub("startseite", "kader", club_urls), "/plus/1")
     for(club_url in club_urls) {
-      webpage_club <- read_url(club_url, use_rvest = TRUE)
+      webpage_club <- read_url(club_url, 
+                               use_rvest = TRUE,
+                               stop_if_failed = TRUE, 
+                               object_to_save = player_jsons, 
+                               object_name = "player_jsons")
       club_name <- html_nodes(webpage_club, ".data-header__headline-wrapper--oswald") %>% html_text()
       club_name <- substr(club_name, 14, nchar(club_name) - 8)
       player_names <- html_nodes(webpage_club, ".inline-table a") %>% html_text()
@@ -31,7 +39,10 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current
         for(player_id in player_ids) {
           if(is.null(player_jsons[[player_id]])) {
             player_jsons[[player_id]] <- read_url(url = paste0("https://www.transfermarkt.com/ceapi/marketValueDevelopment/graph/", player_id),
-                                                  use_rvest = FALSE)
+                                                  use_rvest = FALSE,
+                                                  stop_if_failed = TRUE, 
+                                                  object_to_save = player_jsons, 
+                                                  object_name = "player_jsons")
             if(player_jsons[[player_id]] == "error") {
               saveRDS(player_jsons, file = file.path("cache",
                                                      paste0("player_jsons_",

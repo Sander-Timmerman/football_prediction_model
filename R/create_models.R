@@ -1,4 +1,4 @@
-create_models <- function(aggregated_transfermarkt_data_cache, transfermarkt_data_cache, player_jsons_cache, football_data, aggregated_football_data, data_source_info, is_current_season, namen) {
+create_models <- function(transfermarkt_data_cache, player_jsons_cache, football_data, aggregated_football_data, data_source_info, is_current_season, namen) {
   flog.info("Starts gathering and aggregating data from Transfermarkt from previous seasons")
   
   player_jsons <- use_function_with_caching(player_jsons_cache, "player_jsons", list)
