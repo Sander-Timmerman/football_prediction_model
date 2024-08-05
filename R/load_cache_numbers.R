@@ -1,10 +1,10 @@
-load_cache_paths <- function(football_data_cache,
-                             aggregated_football_data_cache, 
-                             all_models_cache, 
-                             player_jsons_cache,
-                             transfermarkt_data_cache,
-                             transfermarkt_data_new_cache,
-                             all_final_standings_cache) {
+load_cache_numbers <- function(football_data_cache,
+                               aggregated_football_data_cache, 
+                               all_models_cache, 
+                               player_jsons_cache,
+                               transfermarkt_data_cache,
+                               transfermarkt_data_new_cache,
+                               all_final_standings_cache) {
   if(is.null(all_models_cache) & !(is.null(aggregated_football_data_cache))) {
     aggregated_football_data_cache <- NULL
     flog.warn("Because all_models_cache is empty, aggregated_football_data_cache will not be used")
