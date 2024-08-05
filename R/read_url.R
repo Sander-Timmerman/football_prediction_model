@@ -22,8 +22,7 @@ read_url <- function(url, use_rvest = TRUE, stop_if_failed = FALSE, object_to_sa
           saveRDS(object_to_save, file = file.path("cache", paste0(object_name, "_", Sys.Date(), ".rds")))
           flog.info(paste0("Saved ", object_name, " to cache"))
         }
-        flog.fatal(paste("Page with url", url, "could not be read. Application will be quit"))
-        stop(paste("Page with url", url, "could not be read. Application will be quit"))
+        stop(paste("Page with url", url, "could not be read"))
       } else {
         flog.error(paste("Page with url", url, "could not be read. Returning NULL value"))
       }
