@@ -1,4 +1,4 @@
-do_monte_carlo_simulation <- function(prediction, football_data_new, namen, settings) {
+do_monte_carlo_simulation <- function(prediction, football_data_new, namen, settings, run_number) {
   for(competition in unique(prediction$Competitie)) {
     flog.info(paste0("Starting Monte Carlo simulation for competition ", competition))
     
@@ -49,7 +49,7 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
     
     results_table <- create_results_table(all_simulations, settings$n_sims, prediction_competition)
     if(settings$write_results) {
-      write.xlsx(results_table, paste0("output/results_table_", competition, "_on_", Sys.Date(), ".xlsx"))
+      write.xlsx(results_table, file.path("output", run_number, paste0("results_table_", competition, ".xlsx")))
       flog.info(paste0("Written results table for competition ", competition, " in the output folder"))
     }
   }

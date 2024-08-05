@@ -31,7 +31,7 @@ run_prediction <- function(all_cache_numbers, local_input, settings, run_number)
   
   next_game_round_prediction <- predict_next_game_round(prediction)
   
-  results_table <- do_monte_carlo_simulation(prediction, football_data_new, namen, settings)
+  results_table <- do_monte_carlo_simulation(prediction, football_data_new, namen, settings, run_number)
   output <- list(results_table = results_table,
                  prediction = prediction,
                  next_game_round_prediction = next_game_round_prediction)

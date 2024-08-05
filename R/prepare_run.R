@@ -24,6 +24,7 @@ prepare_run <- function(param_json) {
   if(!dir.exists("output")) {
     dir.create("output")
   }
+  dir.create(file.path("output", run_number))
   
   return(run_number)
 }
