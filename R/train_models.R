@@ -1,5 +1,10 @@
-train_models <- function(football_data, aggregated_football_data, aggregated_transfermarkt_data, namen) {
-  flog.info("Starts training prediction models based on data from previous seasons")
+train_models <- function(input_data, namen) {
+  flog.info("Starts training prediction models based on data from past seasons")
+  
+  input_data$football_data <- football_data
+  input_data$aggregated_football_data <- aggregated_football_data
+  input_data$aggregated_transfermarkt_data <- aggregated_transfermarkt_data
+  
   all_models <- list()
   for(game_round in 0 : 30) {
     flog.info(paste0("Start training model for game round ", game_round))

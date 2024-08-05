@@ -1,4 +1,5 @@
 gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current_season) {
+  flog.info("Starts gathering Transfermarkt data")
   transfermarkt_data <- NULL
   for(i in seq_len(nrow(urls_tm))) {
     competition_urls <- as.character(urls_tm[i, 4])
@@ -38,20 +39,12 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current
         market_values <- NULL
         for(player_id in player_ids) {
           if(is.null(player_jsons[[player_id]])) {
-            player_jsons[[player_id]] <- read_url(url = paste0("https://www.transfermarkt.com/ceapi/marketValueDevelopment/graph/", player_id),
-                                                  use_rvest = FALSE,
-                                                  stop_if_failed = TRUE, 
-                                                  object_to_save = player_jsons, 
-                                                  object_name = "player_jsons")
-            if(player_jsons[[player_id]] == "error") {
-              saveRDS(player_jsons, file = file.path("cache",
-                                                     paste0("player_jsons_",
-                                                            Sys.Date(),
-                                                            ".rds")))
-              flog.fatal("Loading of player info interrupted (lost internet connection?). Saved all the player pages requested so far")
-              stop("Loading of player info interrupted (lost internet connection?). Saved all the player pages requested so far")
+            player_jsons[[player_id]] <- suppressWarnings(read_url(url = paste0("https://www.transfermarkt.com/ceapi/marketValueDevelopment/graph/", player_id),
+                                                                   use_rvest = FALSE,
+                                                                   stop_if_failed = TRUE, 
+                                                                   object_to_save = player_jsons, 
+                                                                   object_name = "player_jsons"))
             }
-          }
           market_value <- determine_market_value(player_jsons[[player_id]], start_date)
           market_values <- c(market_values, market_value)
         }
@@ -70,6 +63,8 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current
     saveRDS(player_jsons, file = paste0("player_jsons_",
                                         Sys.Date(),
                                         ".rds"))
+    flog.info("Saved player info to cache")
   }
+  flog.info("Finished gathering Transfermarkt data")
   return(transfermarkt_data)
 }
