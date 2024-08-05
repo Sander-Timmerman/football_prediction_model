@@ -26,5 +26,7 @@ prepare_run <- function(param_json) {
   }
   dir.create(file.path("output", run_number))
   
+  flog.appender(appender.tee("application_logs.log"))
+  
   return(run_number)
 }
