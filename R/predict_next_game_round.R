@@ -18,5 +18,6 @@ predict_next_game_round <- function(prediction, data_source_info, settings, run_
   if(settings$write_results) {
     write.xlsx(match_expectations, file.path("output", run_number, paste0("match_expectations.xlsx")))
     flog.info(paste0("Written match expectations in the output folder"))
+  }
   return(match_expectations)
 }
