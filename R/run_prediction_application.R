@@ -24,7 +24,8 @@ run_prediction_application <- function(football_data_cache = NULL,
       output <- run_prediction(all_cache_numbers, local_input, settings, run_number)
       flog.info("Application run finished successfully")
       update_run_history(run_number, success = TRUE)
-      return(output)
+      
+      output
     },
     error = function(e) {
       flog.fatal(paste0("Application crashed because of the following error: ", e))

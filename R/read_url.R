@@ -8,7 +8,7 @@ read_url <- function(url, use_rvest = TRUE, stop_if_failed = FALSE, object_to_sa
           page <- read_html(url)
         } else page <- readLines(url)
         flog.debug(paste("Succesfully read url", url))
-        return(page)
+        page
       },
       error = function(cond) {
         flog.warn(paste("Attempt to read", url, "failed"))
@@ -29,6 +29,5 @@ read_url <- function(url, use_rvest = TRUE, stop_if_failed = FALSE, object_to_sa
       break
     } 
   }
-
   return(page)
 }

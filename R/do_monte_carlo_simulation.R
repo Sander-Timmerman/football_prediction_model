@@ -55,7 +55,7 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
           write.xlsx(results_table, file.path("output", run_number, paste0("results_table_", competition, ".xlsx")))
           flog.info(paste0("Written results table for competition ", competition, " in the output folder"))
         }
-        return(results_table)
+        results_table
       },
       error = function(e) {
         flog.error(paste0("Monte Carlo simulation for competition ", competition, " failed. Returning empty dataframe. Error message: ", e))
