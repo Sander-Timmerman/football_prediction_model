@@ -1,4 +1,4 @@
-prepare_run <- function(param_json) {
+prepare_run <- function(param_json, write_results) {
   if(!file.exists("run_history.csv")) {
     write.csv(data.frame(run_number = integer(),
                          time = integer(),
@@ -21,10 +21,12 @@ prepare_run <- function(param_json) {
   }
   dir.create(file.path("cache", run_number))
   
-  if(!dir.exists("output")) {
-    dir.create("output")
+  if(write_results) {
+    if(!dir.exists("output")) {
+      dir.create("output")
+    }
+    dir.create(file.path("output", run_number))
   }
-  dir.create(file.path("output", run_number))
   
   flog.appender(appender.tee("application_logs.log"))
   
