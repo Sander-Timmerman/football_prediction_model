@@ -19,7 +19,7 @@ read_url <- function(url, use_rvest = TRUE, stop_if_failed = FALSE, object_to_sa
     if(attempts == 3) {
       if(stop_if_failed) {
         if(!is.null(object_to_save)) {
-          saveRDS(object_to_save, file = file.path("cache", paste0(run_number, object_name, ".rds")))
+          saveRDS(object_to_save, file = file.path("cache", run_number, paste0(object_name, ".rds")))
           flog.info(paste0("Saved ", object_name, " to cache"))
         }
         stop(paste("Page with url", url, "could not be read"))

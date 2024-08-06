@@ -61,7 +61,7 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current
     }
   }
   if(!is_current_season) {
-    saveRDS(player_jsons, file = file.path(run_number, "player_jsons.rds"))
+    saveRDS(player_jsons, file = file.path("cache", run_number, "player_jsons.rds"))
     flog.info("Saved player_jsons to cache")
   }
   flog.info("Finished gathering Transfermarkt data")
