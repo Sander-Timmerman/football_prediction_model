@@ -38,7 +38,8 @@ load_input_data <- function(football_data_cache, aggregated_football_data_cache,
                                                   urls_tm,
                                                   player_jsons,
                                                   is_current_season,
-                                                  local_input$months)
+                                                  local_input$months,
+                                                  run_number)
   aggregated_transfermarkt_data <- aggregate_transfermarkt_data(transfermarkt_data)
   input_data$aggregated_transfermarkt_data <- aggregated_transfermarkt_data
   return(input_data)

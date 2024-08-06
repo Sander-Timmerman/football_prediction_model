@@ -9,7 +9,7 @@ run_prediction <- function(all_cache_numbers, local_input, settings, run_number)
                                              local_input,
                                              is_current_season = FALSE)
   
-  all_models <- use_function_with_caching(all_models_cache, 
+  all_models <- use_function_with_caching(all_cache_numbers$all_models_cache, 
                                           "all_models",
                                           run_number,
                                           train_models,
