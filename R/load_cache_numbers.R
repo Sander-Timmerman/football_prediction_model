@@ -5,9 +5,10 @@ load_cache_numbers <- function(football_data_cache,
                                transfermarkt_data_cache,
                                transfermarkt_data_new_cache,
                                all_final_standings_cache) {
-  if(is.null(all_models_cache) & !(is.null(aggregated_football_data_cache))) {
+  if(is.null(all_models_cache) & !(is.null(aggregated_football_data_cache)) &
+     football_data_cache != aggregated_football_data_cache) {
     aggregated_football_data_cache <- NULL
-    flog.warn("Because all_models_cache is empty, aggregated_football_data_cache will not be used")
+    flog.warn("Aggregated_football_data_cache will not be used")
   }
   
   all_cache_paths <- list()

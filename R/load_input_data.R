@@ -2,15 +2,17 @@ load_input_data <- function(football_data_cache, aggregated_football_data_cache,
   flog.info(paste0("Starts loading data from ", if(is_current_season) "this season" else "past seasons"))
   input_data <- list()
   
+  period_used <- if(is_current_season) "this_season" else "past_seasons"
+  
   urls_fd <- find_data_urls(local_input$data_source_info, "football_data", is_current_season, current_season)
   football_data <- use_function_with_caching(football_data_cache, 
-                                             "football_data",
+                                             paste0("football_data_", period_used),
                                              run_number,
                                              gather_football_data, 
                                              urls_fd, 
                                              local_input$names)
   aggregated_football_data <- use_function_with_caching(aggregated_football_data_cache, 
-                                                        "aggregated_football_data",
+                                                        paste0("aggregated_football_data_", period_used),
                                                         run_number,
                                                         aggregate_football_data, 
                                                         football_data, 
@@ -32,7 +34,7 @@ load_input_data <- function(football_data_cache, aggregated_football_data_cache,
   urls_tm <- find_data_urls(local_input$data_source_info, "transfermarkt", is_current_season, current_season, "startseite", 1) %>%
     inner_join(df_startdatums, by = c("Competitie", "Seizoen"))
   transfermarkt_data <- use_function_with_caching(transfermarkt_data_cache,
-                                                  "transfermarkt_data",
+                                                  paste0("transfermarkt_data_", period_used),
                                                   run_number,
                                                   gather_transfermarkt_data,
                                                   urls_tm,

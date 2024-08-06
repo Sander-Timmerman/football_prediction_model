@@ -12,8 +12,4 @@ flog.threshold(INFO)
 
 source.all("R")
 
-output <- run_prediction_application(n_sims = 10000,
-                                     write_results = TRUE)
-View(output$results_table)
-View(output$prediction)
-View(output$next_game_round_prediction)
+output <- run_prediction_application()

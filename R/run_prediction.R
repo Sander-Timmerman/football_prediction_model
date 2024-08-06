@@ -15,7 +15,9 @@ run_prediction <- function(all_cache_numbers, local_input, settings, run_number)
                                           run_number,
                                           train_models,
                                           input_data_past_seasons, 
-                                          local_input$names)
+                                          local_input$names,
+                                          all_cache_numbers$aggregated_football_data_cache,
+                                          run_number)
   
   input_data_this_season <- load_input_data(football_data_cache = NULL, 
                                             aggregated_football_data_cache = NULL, 
