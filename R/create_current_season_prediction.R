@@ -23,5 +23,11 @@ create_current_season_prediction <- function(aggregated_football_data_old, input
                                                     all_models,
                                                     with_shots = FALSE)
   prediction <- rbind(prediction_with_shots, prediction_without_shots)
+  
+  if(write_results) {
+    write.xlsx(prediction, file.path("output", run_number, paste0("ratings.xlsx")))
+    flog.info(paste0("Written predicted future points and goals in the output folder"))
+  }
+  
   return(prediction)
 }

@@ -31,7 +31,8 @@ run_prediction <- function(all_cache_numbers, local_input, settings, run_number)
   
   prediction <- create_current_season_prediction(input_data_past_seasons$aggregated_football_data, 
                                                  input_data_this_season,
-                                                 all_models)
+                                                 all_models,
+                                                 settings$write_results)
   
   next_game_round_prediction <- predict_next_game_round(prediction, local_input$data_source_info, settings, run_number)
   
