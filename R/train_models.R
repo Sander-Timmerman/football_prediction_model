@@ -6,6 +6,7 @@ train_models <- function(input_data, namen, aggregated_football_data_cache, run_
   aggregated_transfermarkt_data <- input_data$aggregated_transfermarkt_data
   
   all_models <- list()
+  all_means <- numeric()
   for(game_round in 0 : 30) {
     flog.info(paste0("Start training model for game round ", game_round))
     if(game_round > 0) {
@@ -27,12 +28,20 @@ train_models <- function(input_data, namen, aggregated_football_data_cache, run_
                                                                    aggregate_football_data,
                                                                    football_data_passed,
                                                                    namen)
-      model_input <- add_in_season_info(model_input, aggregated_football_data_passed)
-    } else model_input <- create_model_input(aggregated_football_data, aggregated_transfermarkt_data, aggregated_football_data, is_new_data = FALSE)
-    
+      model_input <- add_in_season_info(model_input, aggregated_football_data_passed) %>%
+        select(-Aantalwedstrijden)
+      mean_match_numbers <- mean(right_join(aggregated_football_data_to_come, model_input, by = c("Team", "Competitie", "Seizoen"))$Aantalwedstrijden) + game_round
+      all_means <- c(all_means, mean_match_numbers)
+    } else {
+      model_input <- create_model_input(aggregated_football_data, aggregated_transfermarkt_data, aggregated_football_data, is_new_data = FALSE)
+      browser()
+      mean_match_numbers <- mean(right_join(aggregated_football_data, model_input, by = c("Team", "Competitie", "Seizoen"))$Aantalwedstrijden) + game_round
+      all_means <- c(all_means, mean_match_numbers)
+    } 
     all_models[[game_round + 1]] <- create_models_for_game_round(model_input)
     flog.info(paste0("Created model for game round ", game_round))
   }
+  saveRDS(all_means, file = "all_means.rds")
   save(all_models, file = paste0("cache/all_models_",
                                  Sys.Date(),
                                  ".RData"))
