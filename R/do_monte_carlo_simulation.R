@@ -18,7 +18,7 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
                  AwayTeam = mgsub(as.character(AwayTeam), namen$Football_data, namen$Transfermarkt))
         
         current_standings <- calculate_standings(played_matches) %>%
-          right_join(data.frame(Team = all_teams))
+          right_join(data.frame(Team = all_teams), by = "Team")
         current_standings[is.na(current_standings)] <- 0
         
         matches_to_simulate <- expand.grid(HomeTeam = all_teams, AwayTeam = all_teams, stringsAsFactors = FALSE) %>%

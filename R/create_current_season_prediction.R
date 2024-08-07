@@ -1,4 +1,4 @@
-create_current_season_prediction <- function(aggregated_football_data_old, input_data_new , all_models) {
+create_current_season_prediction <- function(aggregated_football_data_old, input_data_new, all_models, write_results, run_number) {
   flog.info("Using models to make a prediction for current season")
   aggregated_football_data_new <- input_data_new$aggregated_football_data
   aggregated_level_two_data <- input_data_new$aggregated_level_two_data
