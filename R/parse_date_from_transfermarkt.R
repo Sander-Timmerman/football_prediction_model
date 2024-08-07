@@ -1,9 +1,8 @@
-parse_date_from_transfermarkt <- function(date_string) {
+parse_date_from_transfermarkt <- function(date_string, maanden) {
   date_string[date_string %in% c("-", "")] <- "Jan 1, 1900"
   jaar <- as.numeric(substr(date_string, nchar(date_string) - 3, nchar(date_string)))
   
   maand <- substr(date_string, 1, 3)
-  maanden <- read.csv("input/maanden.csv", colClasses = c(rep("character", 2)))
   maand <- mgsub(maand, maanden$Maand, maanden$Cijfer)
   
   dag <- as.numeric(substr(date_string, 5, nchar(date_string) - 6))

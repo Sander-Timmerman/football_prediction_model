@@ -3,12 +3,12 @@ gather_level_two_final_standings <- function(data_source_info, is_current_season
   all_final_standings <- data.frame()
   for(i in seq_len(nrow(urls_tm))) {
     competition_url <- as.character(urls_tm[i, 4])
-    webpage <- read_url(competition_url, use_rvest = TRUE)
+    webpage <- read_url(competition_url, use_rvest = TRUE, stop_if_failed = TRUE)
     club_urls <- webpage %>% html_nodes("#yw1 .hauptlink a:nth-child(1)") %>% html_attr("href")
     club_urls <- paste0("http://www.transfermarkt.com", gsub("startseite", "kader", club_urls), "/plus/1")
     all_club_names <- character(0)
     for(club_url in club_urls) {
-      webpage_club <- read_url(club_url, use_rvest = TRUE)
+      webpage_club <- read_url(club_url, use_rvest = TRUE, stop_if_failed = TRUE)
       club_name <- html_nodes(webpage_club, ".data-header__headline-wrapper--oswald") %>% html_text()
       club_name <- substr(club_name, 14, nchar(club_name) - 8)
       all_club_names <- c(all_club_names, club_name)

@@ -1,26 +1,33 @@
-read_url <- function(url, use_rvest = TRUE) {
-  pagina <- "error"
-  pogingen <- 0
-  while(pagina[1] == "error") {
-    pagina <- tryCatch(
+read_url <- function(url, use_rvest = TRUE, stop_if_failed = FALSE, object_to_save = NULL, object_name, run_number) {
+  page <- NULL
+  attempts <- 0
+  while(is.null(page[1])) {
+    page <- tryCatch(
       {
         if(use_rvest) {
           page <- read_html(url)
         } else page <- readLines(url)
         flog.debug(paste("Succesfully read url", url))
-        return(page)
+        page
       },
       error = function(cond) {
-        flog.warn(paste("Poging om url", url, "te lezen mislukt"))
-        return("error")
+        flog.warn(paste("Attempt to read", url, "failed"))
+        return(NULL)
       }
     )
-    pogingen <- pogingen + 1
-    if(pogingen == 3) {
-      flog.error(paste("Pagina met url", url, "kon niet worden gelezen"))
+    attempts <- attempts + 1
+    if(attempts == 3) {
+      if(stop_if_failed) {
+        if(!is.null(object_to_save)) {
+          saveRDS(object_to_save, file = file.path("cache", run_number, paste0(object_name, ".rds")))
+          flog.info(paste0("Saved ", object_name, " to cache"))
+        }
+        stop(paste("Page with url", url, "could not be read"))
+      } else {
+        flog.error(paste("Page with url", url, "could not be read. Returning NULL value"))
+      }
       break
     } 
   }
-
-  return(pagina)
+  return(page)
 }
