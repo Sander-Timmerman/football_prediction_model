@@ -32,13 +32,14 @@ train_models <- function(input_data, namen, aggregated_football_data_cache, run_
         select(-Aantalwedstrijden)
       mean_match_numbers <- mean(right_join(aggregated_football_data_to_come, model_input, by = c("Team", "Competitie", "Seizoen"))$Aantalwedstrijden) + game_round
       all_means <- c(all_means, mean_match_numbers)
+      model_with_old_params <- create_models_for_game_round(model_input, all_models[[game_round]], threshold = 0.05)
+      all_models[[game_round + 1]] <- create_models_for_game_round(model_input, fixed_model = model_with_old_params)
     } else {
       model_input <- create_model_input(aggregated_football_data, aggregated_transfermarkt_data, aggregated_football_data, is_new_data = FALSE)
-      browser()
       mean_match_numbers <- mean(right_join(aggregated_football_data, model_input, by = c("Team", "Competitie", "Seizoen"))$Aantalwedstrijden) + game_round
       all_means <- c(all_means, mean_match_numbers)
+      all_models[[game_round + 1]] <- create_models_for_game_round(model_input)
     } 
-    all_models[[game_round + 1]] <- create_models_for_game_round(model_input)
     flog.info(paste0("Created model for game round ", game_round))
   }
   saveRDS(all_means, file = "all_means.rds")
