@@ -10,6 +10,9 @@ run_prediction <- function(all_cache_numbers, local_input, settings, run_number)
                                              is_current_season = FALSE,
                                              settings$current_season)
   
+  competition_parameters <- calculate_competition_parameters(input_data_past_seasons$football_data, 
+                                                             settings$current_season)
+  
   all_models <- use_function_with_caching(all_cache_numbers$all_models_cache, 
                                           "all_models",
                                           run_number,
@@ -35,9 +38,18 @@ run_prediction <- function(all_cache_numbers, local_input, settings, run_number)
                                                  settings$write_results,
                                                  run_number)
   
-  next_game_round_prediction <- predict_next_game_round(prediction, local_input$data_source_info, settings, run_number)
+  next_game_round_prediction <- predict_next_game_round(prediction, 
+                                                        local_input$data_source_info, 
+                                                        settings, 
+                                                        run_number)
   
-  all_results_tables <- do_monte_carlo_simulation(prediction, input_data_this_season$football_data, local_input$names, settings, run_number)
+  all_results_tables <- do_monte_carlo_simulation(prediction, 
+                                                  input_data_this_season$football_data, 
+                                                  local_input$names, 
+                                                  settings, 
+                                                  run_number,
+                                                  competition_parameters)
+  
   output <- list(all_results_tables = all_results_tables,
                  prediction = prediction,
                  next_game_round_prediction = next_game_round_prediction)

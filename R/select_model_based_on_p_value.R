@@ -13,8 +13,10 @@ select_model_based_on_p_value <- function(model, threshold, non_removable_variab
     }
     if(variable_to_remove %in% non_removable_variables) {
       p_values_removable <- p_values[!(old_model_variables[-1] %in% non_removable_variables)]
-      if(max(p_values_removable) > threshold) {
-        variable_to_remove <- names(p_values_removable)[which.max(p_values_removable)]
+      if(length(p_values_removable) > 0) {
+        if(max(p_values_removable) > threshold) {
+          variable_to_remove <- names(p_values_removable)[which.max(p_values_removable)]
+        } else break
       } else break
     }
     new_model_variables <- setdiff(old_model_variables, variable_to_remove)

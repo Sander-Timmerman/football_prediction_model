@@ -1,33 +1,30 @@
-create_model_with_and_without_shots <- function(model_input, old_model = NULL, fixed_model = NULL, threshold = 0.01) {
-  if(!is.null(old_model)) {
-    model_input_shots <- model_input[-(which(!(colnames(model_input) %in% 
-                                           names(old_model$with_shots$coefficients)))[-1])]
-  } else {
-    model_input_shots <- model_input
+create_model_with_and_without_shots <- function(model_input, mean_games, perfect_variance_one_game, old_model = NULL, fixed_model = NULL, threshold = 0.01) {
+  models <- list()
+  for(with_or_without in c("with_shots", "without_shots")) {
+    if(!is.null(old_model)) {
+      model_input_with_without <- model_input[-(which(!(colnames(model_input) %in% 
+                                                   names(old_model[[with_or_without]]$coefficients)))[-1])]
+    } else {
+      model_input_with_without <- model_input
+    }
+    
+    non_removable_variables <- names(fixed_model[[with_or_without]]$coefficients)[-1]
+    
+    if(with_or_without == "without_shots") {
+      shots_last_season <- which(substr(colnames(model_input_with_without), 1, 5) == "Schot" & 
+                                   substr(colnames(model_input_with_without), 
+                                          nchar(colnames(model_input_with_without)) - 13, 
+                                          nchar(colnames(model_input_with_without))) == "_vorig_seizoen")
+      if(length(shots_last_season) > 0) {
+        model_input_with_without <- model_input_with_without[-shots_last_season]
+      } else {
+        model_input_with_without <- model_input_with_without
+      }
+    }
+    model_with_without <- fit_model(model_input_with_without, threshold, non_removable_variables)
+    model_with_without$performance <- calculate_model_performance(model_with_without, mean_games, perfect_variance_one_game)
+    
+    models[[with_or_without]] <- model_with_without
   }
-  
-  non_removable_variables <- names(fixed_model$with_shots$coefficients)[-1]
-  model_with_shots <- fit_model(model_input_shots, threshold, non_removable_variables)
-  
-  if(!is.null(old_model)) {
-    model_input_without_shots <- model_input[-(which(!(colnames(model_input) %in% 
-                                           names(old_model$without_shots$coefficients)))[-1])]
-  } else {
-    model_input_without_shots <- model_input
-  }
-  non_removable_variables <- names(fixed_model$without_shots$coefficients)[-1]
-
-  shots_last_season <- which(substr(colnames(model_input_without_shots), 1, 5) == "Schot" & 
-                               substr(colnames(model_input_without_shots), 
-                                      nchar(colnames(model_input_without_shots)) - 13, 
-                                      nchar(colnames(model_input_without_shots))) == "_vorig_seizoen")
-  if(length(shots_last_season) > 0) {
-    model_input_without_shots <- model_input_without_shots[-shots_last_season]
-  } else {
-    model_input_without_shots <- model_input_without_shots
-  }
-  model_without_shots <- fit_model(model_input_without_shots, threshold, non_removable_variables)
-  
-  return(list(with_shots = model_with_shots,
-              without_shots = model_without_shots))
+  return(models)
 }

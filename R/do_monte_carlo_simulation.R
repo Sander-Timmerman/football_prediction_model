@@ -1,4 +1,4 @@
-do_monte_carlo_simulation <- function(prediction, football_data_new, namen, settings, run_number) {
+do_monte_carlo_simulation <- function(prediction, football_data_new, namen, settings, run_number, competition_parameters) {
   all_results_tables <- list()
   flog.info("Starting Monte Carlo simulations")
   for(competition in unique(prediction$Competitie)) {
@@ -36,6 +36,10 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
           filter(!(Match %in% paste(played_matches$HomeTeam, played_matches$AwayTeam))) %>%
           select(-Match)
         
+        competition_parameters$goals <- competition_parameters$goals_per_competition[
+          which(names(competition_parameters$goals_per_competition) == competition)
+          ]
+        
         all_simulations <- data.frame(Team = rep(all_teams, settings$n_sims),
                                       SimNr = rep(1 : settings$n_sims, each = n_teams),
                                       Punten = rep(NA, n_teams * settings$n_sims),
@@ -51,7 +55,7 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
         
         for (sim_nr in 1 : settings$n_sims) {
           flog.debug(paste0("Starting simulation number ", sim_nr))
-          total_standings <- run_simulation(prediction_competition, matches_to_simulate, current_standings)    
+          total_standings <- run_simulation(prediction_competition, matches_to_simulate, current_standings, competition_parameters)    
           all_simulations[(n_teams * (sim_nr - 1) + 1) : (n_teams * sim_nr), 3 : 6] <- total_standings
           
           info <- sprintf("Simulating %d%% completed", round((sim_nr / settings$n_sims * 100)))
