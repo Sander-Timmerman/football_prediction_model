@@ -72,6 +72,7 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
       },
       error = function(e) {
         flog.error(paste0("Monte Carlo simulation for competition ", competition, " failed. Returning empty dataframe. Error message: ", e))
+        close(pb)
         return(data.frame())
       }
     )
