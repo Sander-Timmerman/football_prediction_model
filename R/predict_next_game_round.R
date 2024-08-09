@@ -20,7 +20,7 @@ predict_next_game_round <- function(prediction, data_source_info, settings, run_
     left_join(data.frame(Competition = names(competition_parameters$goals_per_competition), 
                          Goals_per_match = competition_parameters$goals_per_competition), 
               by = "Competition")
-  goal_expectations <- calculate_goal_expectations(prediction)
+  goal_expectations <- calculate_goal_expectations(prediction, competition_parameters$points_to_goalratio)
   match_expectations <- calculate_match_expectations(df_matches, goal_expectations, df_matches$Goals_per_match, competition_parameters$home_advantage) %>%
     select(-Goals_per_match)
   if(settings$write_results) {

@@ -1,6 +1,6 @@
-calculate_goal_expectations <- function(prediction) {
+calculate_goal_expectations <- function(prediction, points_to_goalratio) {
   prediction <- prediction %>%
-    mutate(Doelpuntenvoor = 0.266252 * Punten * Goals + 0.128078 * Goals,
+    mutate(Doelpuntenvoor = points_to_goalratio[2] * Punten * Goals + points_to_goalratio[1] * Goals,
            Doelpuntentegen = Goals - Doelpuntenvoor) %>%
     select(-(Punten : Goals), -Competitie)
   return(prediction)

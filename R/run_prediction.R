@@ -11,6 +11,7 @@ run_prediction <- function(all_cache_numbers, local_input, settings, run_number)
                                              settings$current_season)
   
   competition_parameters <- calculate_competition_parameters(input_data_past_seasons$football_data, 
+                                                             input_data_past_seasons$aggregated_football_data,
                                                              settings$current_season)
   
   all_models <- use_function_with_caching(all_cache_numbers$all_models_cache, 

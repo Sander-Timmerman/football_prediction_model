@@ -1,4 +1,4 @@
-calculate_competition_parameters <- function(football_data, current_season) {
+calculate_competition_parameters <- function(football_data, aggregated_football_data, current_season) {
   competition_parameters <- list()
   home_matches <- football_data[seq(1, nrow(football_data) - 1, by = 2), ]
   
@@ -15,5 +15,7 @@ calculate_competition_parameters <- function(football_data, current_season) {
   names(pred_goals_per_competition) <- unique(home_matches$Competitie)
   competition_parameters$goals_per_competition <- pred_goals_per_competition / 2
   
+  competition_parameters$points_to_goalratio <- lm(Goalratio ~ Punten, data = aggregated_football_data)$coefficients
+
   return(competition_parameters)
 }
