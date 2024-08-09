@@ -38,10 +38,11 @@ run_prediction <- function(all_cache_numbers, local_input, settings, run_number)
                                                  settings$write_results,
                                                  run_number)
   
-  next_game_round_prediction <- predict_next_game_round(prediction, 
+  next_game_round_prediction <- predict_next_game_round(select(prediction, -c(Punten_sd, Goals_sd)), 
                                                         local_input$data_source_info, 
                                                         settings, 
-                                                        run_number)
+                                                        run_number,
+                                                        competition_parameters)
   
   all_results_tables <- do_monte_carlo_simulation(prediction, 
                                                   input_data_this_season$football_data, 
