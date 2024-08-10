@@ -6,7 +6,6 @@ train_models <- function(input_data, namen, aggregated_football_data_cache, run_
   aggregated_transfermarkt_data <- input_data$aggregated_transfermarkt_data
   
   all_models <- list()
-  all_means <- numeric()
   for(game_round in 0 : 30) {
     flog.info(paste0("Start training model for game round ", game_round))
     if(game_round > 0) {
