@@ -1,9 +1,14 @@
-run_simulation <- function(prediction_competition, matches_to_simulate, current_standings) {
+run_simulation <- function(prediction_competition, matches_to_simulate, current_standings, competition_parameters) {
   prediction_simulation <- prediction_competition %>%
-    mutate(Punten = rnorm(nrow(prediction_competition), mean=Punten, sd = 0.13),
-           Goals = rnorm(nrow(prediction_competition), mean=Goals, sd = 0.11)) %>%
-    calculate_goal_expectations()
-  matches_to_simulate <- calculate_match_expectations(matches_to_simulate, prediction_simulation, 1.35)
+    mutate(Punten = rnorm(nrow(prediction_competition), mean = Punten, sd = Punten_sd),
+           Goals = rnorm(nrow(prediction_competition), mean = Goals, sd = Goals_sd)) %>%
+    select(-Punten_sd, -Goals_sd) %>%
+    calculate_goal_expectations(competition_parameters$points_to_goalratio)
+  
+  matches_to_simulate <- calculate_match_expectations(matches_to_simulate, 
+                                                      prediction_simulation, 
+                                                      competition_parameters$goals - 0.15,
+                                                      competition_parameters$home_advantage)
   
   simulation_standings <- matches_to_simulate %>%
     mutate(FTHG = rpois(nrow(matches_to_simulate), lambda = matches_to_simulate$ExpHG),

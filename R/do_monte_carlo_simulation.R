@@ -1,4 +1,4 @@
-do_monte_carlo_simulation <- function(prediction, football_data_new, namen, settings, run_number) {
+do_monte_carlo_simulation <- function(prediction, football_data_new, namen, settings, run_number, competition_parameters) {
   all_results_tables <- list()
   flog.info("Starting Monte Carlo simulations")
   for(competition in unique(prediction$Competitie)) {
@@ -11,11 +11,20 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
         all_teams <- unique(prediction_competition$Team)
         n_teams <- length(all_teams)
         
-        played_matches <- football_data_new[seq(1, nrow(football_data_new), 2),] %>%
-          filter(Competitie == competition) %>%
-          select(HomeTeam, AwayTeam, FTHG, FTAG, HPts, APts) %>%
-          mutate(HomeTeam = mgsub(as.character(HomeTeam), namen$Football_data, namen$Transfermarkt),
-                 AwayTeam = mgsub(as.character(AwayTeam), namen$Football_data, namen$Transfermarkt))
+        if(nrow(football_data_new) > 0) {
+          played_matches <- football_data_new[seq(1, nrow(football_data_new), 2),] %>%
+            filter(Competitie == competition) %>%
+            select(HomeTeam, AwayTeam, FTHG, FTAG, HPts, APts) %>%
+            mutate(HomeTeam = mgsub(as.character(HomeTeam), namen$Football_data, namen$Transfermarkt),
+                   AwayTeam = mgsub(as.character(AwayTeam), namen$Football_data, namen$Transfermarkt))
+        } else {
+          played_matches <- data.frame(HomeTeam = character(),
+                                       AwayTeam = character(),
+                                       FTHG = integer(),
+                                       FTAG = integer(),
+                                       HPts = integer(),
+                                       APts = integer())
+        }
         
         current_standings <- calculate_standings(played_matches) %>%
           right_join(data.frame(Team = all_teams), by = "Team")
@@ -26,6 +35,10 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
           mutate(Match = paste(HomeTeam, AwayTeam)) %>%
           filter(!(Match %in% paste(played_matches$HomeTeam, played_matches$AwayTeam))) %>%
           select(-Match)
+        
+        competition_parameters$goals <- competition_parameters$goals_per_competition[
+          which(names(competition_parameters$goals_per_competition) == competition)
+          ]
         
         all_simulations <- data.frame(Team = rep(all_teams, settings$n_sims),
                                       SimNr = rep(1 : settings$n_sims, each = n_teams),
@@ -42,7 +55,7 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
         
         for (sim_nr in 1 : settings$n_sims) {
           flog.debug(paste0("Starting simulation number ", sim_nr))
-          total_standings <- run_simulation(prediction_competition, matches_to_simulate, current_standings)    
+          total_standings <- run_simulation(prediction_competition, matches_to_simulate, current_standings, competition_parameters)    
           all_simulations[(n_teams * (sim_nr - 1) + 1) : (n_teams * sim_nr), 3 : 6] <- total_standings
           
           info <- sprintf("Simulating %d%% completed", round((sim_nr / settings$n_sims * 100)))
@@ -59,6 +72,7 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
       },
       error = function(e) {
         flog.error(paste0("Monte Carlo simulation for competition ", competition, " failed. Returning empty dataframe. Error message: ", e))
+        close(pb)
         return(data.frame())
       }
     )
