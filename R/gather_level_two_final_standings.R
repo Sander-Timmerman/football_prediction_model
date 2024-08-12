@@ -1,7 +1,12 @@
 gather_level_two_final_standings <- function(data_source_info, is_current_season) {
+  flog.info("Starts gathering final standings of second level")
   urls_tm <- find_data_urls(data_source_info, "transfermarkt", is_current_season, 24, "tabelle", 2)
   all_final_standings <- data.frame()
   for(i in seq_len(nrow(urls_tm))) {
+    flog.info(paste0("Gathering final standings for competition ", 
+                     as.character(urls_tm[i, 1]),
+                     ", season ",
+                     as.character(urls_tm[i, 2])))
     competition_url <- as.character(urls_tm[i, 4])
     webpage <- read_url(competition_url, use_rvest = TRUE, stop_if_failed = TRUE)
     club_urls <- webpage %>% html_nodes("#yw1 .hauptlink a:nth-child(1)") %>% html_attr("href")
@@ -22,13 +27,14 @@ gather_level_two_final_standings <- function(data_source_info, is_current_season
     goals_against <- as.numeric(sapply(goal_numbers, function(x) x[2]))
     final_standings <- data.frame(Team = all_club_names,
                                   Competitie = as.character(urls_tm[i, 1]),
-                                  Seizoen = 24,
+                                  Seizoen = as.character(urls_tm[i, 2]),
                                   Aantalwedstrijden = n_matches,
                                   Punten = points,
                                   Doelpuntenvoor = goals_for,
                                   Doelpuntentegen = goals_against)
     all_final_standings <- rbind(all_final_standings, final_standings)
   }
+  flog.info("Finished gathering final standings for second level")
   return(all_final_standings)
 }
 

@@ -56,12 +56,12 @@
 86,Darmstadt,SV Darmstadt 98
 87,Ingolstadt,FC Ingolstadt 04
 89,RB Leipzig,RB Leipzig
-97,Fortuna Dusseldorf,Fortuna Düsseldorf
+97,Fortuna Dusseldorf,Fortuna Düsseldorf
 98,Union Berlin,1.FC Union Berlin
 99,Bielefeld,Arminia Bielefeld
 103,Stuttgart,VfB Stuttgart
 104,Bochum,VfL Bochum
-105,Greuther Furth,SpVgg Greuther Fürth
+105,Greuther Furth,SpVgg Greuther Fürth
 106,Bochum,VfL Bochum
 110,Darmstadt,SV Darmstadt 98
 111,Heidenheim,1.FC Heidenheim 1846
@@ -139,7 +139,7 @@
 300,Ajaccio,AC Ajaccio
 301,Bastia,SC Bastia
 302,Bordeaux,FC Girondins Bordeaux
-303,Evian Thonon Gaillard,Thonon Évian Grand Genève FC
+303,Evian Thonon Gaillard,Thonon Évian Grand Genève FC
 304,Guingamp,EA Guingamp
 305,Lille,LOSC Lille
 306,Lorient,FC Lorient
@@ -224,7 +224,7 @@
 487,RWD Molenbeek,RWD Molenbeek
 490,Dender,FCV Dender EH
 491,Aves,Desportivo Aves (- 2020)
-492,Belenenses,CF Os Belenenses
+492,Belenenses,B SAD
 493,Benfica,SL Benfica
 494,Boavista,Boavista FC
 495,Chaves,GD Chaves
@@ -260,7 +260,7 @@
 575,Galatasaray,Galatasaray
 576,Genclerbirligi,Genclerbirligi Ankara
 577,Goztep,Göztepe
-578,Karabukspor,Kardemir Karabkspor
+578,Karabukspor,Kardemir Karabükspor
 579,Kasimpasa,Kasimpasa
 580,Kayserispor,Kayserispor
 581,Konyaspor,Konyaspor
@@ -268,13 +268,13 @@
 583,Sivasspor,Sivasspor
 584,Trabzonspor,Trabzonspor
 585,Yeni Malatyaspor,Yeni Malatyaspor
-596,Ankaragucu,MKE Ankaragücü
+596,Ankaragucu,MKE Ankaragücü
 597,Erzurum BB,Erzurumspor FK
 598,Rizespor,Caykur Rizespor
 600,Denizlispor,Denizlispor
 601,Gaziantep,Gaziantep FK
 602,Hatayspor,Hatayspor
-603,Karagumruk,Fatih Karagümrük
+603,Karagumruk,Fatih Karagümrük
 605,Ad. Demirspor,Adana Demirspor
 606,Altay,Altay SK
 607,Giresunspor,Giresunspor
