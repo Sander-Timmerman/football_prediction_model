@@ -4,7 +4,7 @@ run_prediction <- function(all_cache_numbers, local_input, settings, run_number)
                                              all_cache_numbers$aggregated_football_data_cache, 
                                              all_cache_numbers$transfermarkt_data_cache, 
                                              all_cache_numbers$player_jsons_cache,
-                                             all_final_standings_cache = NULL,
+                                             all_cache_numbers$all_final_standings_cache,
                                              run_number,
                                              local_input,
                                              is_current_season = FALSE,
