@@ -17,6 +17,7 @@ gather_football_data <- function(urls_fd, namen) {
                          Seizoen = integer(),
                          Startdatum = integer(),
                          Niveau = integer())
+  
   for (i in seq_len(nrow(urls_fd))) {
     df_football_data <- read_football_data_csv(as.character(urls_fd[i, 4]),
                                                as.character(urls_fd[i, 1]),

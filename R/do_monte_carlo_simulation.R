@@ -32,7 +32,8 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
         
         matches_to_simulate <- expand.grid(HomeTeam = all_teams, AwayTeam = all_teams, stringsAsFactors = FALSE) %>%
           filter(HomeTeam != AwayTeam) %>%
-          mutate(Match = paste(HomeTeam, AwayTeam)) %>%
+          mutate(Match = paste(HomeTeam, AwayTeam),
+                 Seizoen = settings$current_season) %>%
           filter(!(Match %in% paste(played_matches$HomeTeam, played_matches$AwayTeam))) %>%
           select(-Match)
         

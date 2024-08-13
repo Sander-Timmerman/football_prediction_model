@@ -1,6 +1,6 @@
-gather_level_two_final_standings <- function(data_source_info, is_current_season) {
+gather_level_two_final_standings <- function(data_source_info, is_current_season, current_season) {
   flog.info("Starts gathering final standings of second level")
-  urls_tm <- find_data_urls(data_source_info, "transfermarkt", is_current_season, 24, "tabelle", 2)
+  urls_tm <- find_data_urls(data_source_info, "transfermarkt", is_current_season, current_season, "tabelle", 2)
   all_final_standings <- data.frame()
   for(i in seq_len(nrow(urls_tm))) {
     flog.info(paste0("Gathering final standings for competition ", 

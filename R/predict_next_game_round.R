@@ -4,6 +4,7 @@ predict_next_game_round <- function(prediction, data_source_info, settings, run_
   home_teams <- character()
   away_teams <- character()
   competitions <- character()
+
   for(row in seq_len(nrow(urls_tm))) {
     webpage <- read_url(as.character(urls_tm[row, 4]), use_rvest = TRUE)
     if(is.null(webpage)) next
@@ -16,7 +17,8 @@ predict_next_game_round <- function(prediction, data_source_info, settings, run_
   
   df_matches <- data.frame(HomeTeam = home_teams,
                            AwayTeam = away_teams,
-                           Competition = competitions) %>%
+                           Competition = competitions,
+                           Seizoen = settings$current_season) %>%
     left_join(data.frame(Competition = names(competition_parameters$goals_per_competition), 
                          Goals_per_match = competition_parameters$goals_per_competition), 
               by = "Competition")

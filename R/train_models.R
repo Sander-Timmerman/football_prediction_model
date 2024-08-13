@@ -3,12 +3,6 @@ train_models <- function(input_data, namen, aggregated_football_data_cache, run_
   
   football_data <- input_data$football_data
   aggregated_football_data <- input_data$aggregated_football_data
-  aggregated_level_two_data <-  input_data$aggregated_level_two_data
-  aggregated_level_two_data[setdiff(colnames(aggregated_football_data), colnames(aggregated_level_two_data))] <- NA
-  aggregated_level_two_data <- aggregated_level_two_data[colnames(aggregated_football_data)]
-  aggregated_football_data <- rbind(aggregated_football_data, aggregated_level_two_data) %>%
-    mutate(Seizoen = as.integer(Seizoen))
-   
   aggregated_transfermarkt_data <- input_data$aggregated_transfermarkt_data
   
   all_models <- list()
@@ -40,32 +34,43 @@ train_models <- function(input_data, namen, aggregated_football_data_cache, run_
       
       football_data_to_come <- football_data_game_round %>%
         filter(Aantal > game_round)
+      predicted_outcome <- calculate_predicted_outcomes(football_data_game_round) %>%
+        mutate(Team = mgsub(as.character(Team), namen$Football_data, namen$Transfermarkt))
+      predicted_outcome_to_come <- calculate_predicted_outcomes(football_data_to_come) %>%
+        mutate(Team = mgsub(as.character(Team), namen$Football_data, namen$Transfermarkt))
       aggregated_football_data_to_come <- use_function_with_caching(aggregated_football_data_cache,
                                                                     paste0("aggregated_football_data_to_come_game_round_", game_round),
                                                                     run_number,
                                                                     aggregate_football_data,
                                                                     football_data_to_come,
                                                                     namen) %>%
-        mutate(Punten = Punten + calculate_predicted_outcomes(football_data_game_round)$Points - calculate_predicted_outcomes(football_data_to_come)$Points,
-               Doelsom = Doelsom + calculate_predicted_outcomes(football_data_game_round)$Goals - calculate_predicted_outcomes(football_data_to_come)$Goals)
+        left_join(predicted_outcome, by = c("Team", "Seizoen")) %>%
+        left_join(predicted_outcome_to_come, by = c("Team", "Seizoen")) %>%
+        mutate(Punten = Punten + Points.x - Points.y,
+               Doelsom = Doelsom + Goals.x - Goals.y) %>%
+        select(-(Points.x : Goals.y))
       model_input <- create_model_input(aggregated_football_data, aggregated_transfermarkt_data, aggregated_football_data_to_come, is_new_data = FALSE)
       
       football_data_passed <- football_data_game_round %>%
         filter(Aantal <= game_round)
+      predicted_outcome_passed <- calculate_predicted_outcomes(football_data_passed) %>%
+        mutate(Team = mgsub(as.character(Team), namen$Football_data, namen$Transfermarkt))
       aggregated_football_data_passed <- use_function_with_caching(aggregated_football_data_cache,
                                                                    paste0("aggregated_football_data_passed_game_round_", game_round),
                                                                    run_number,
                                                                    aggregate_football_data,
                                                                    football_data_passed,
                                                                    namen) %>%
-        mutate(Schedule_points = calculate_predicted_outcomes(football_data_game_round)$Points - calculate_predicted_outcomes(football_data_passed)$Points,
-               Schedule_goals = calculate_predicted_outcomes(football_data_game_round)$Goals - calculate_predicted_outcomes(football_data_passed)$Goals)
+        left_join(predicted_outcome, by = c("Team", "Seizoen")) %>%
+        left_join(predicted_outcome_passed, by = c("Team", "Seizoen")) %>%
+        mutate(Schedule_points = Points.x - Points.y,
+               Schedule_goals = Goals.x - Goals.y) %>%
+          select(-(Points.x : Goals.y))
       model_input <- add_in_season_info(model_input, aggregated_football_data_passed) %>%
         select(-Aantalwedstrijden)
       mean_games <- mean(right_join(aggregated_football_data_to_come, model_input, by = c("Team", "Competitie", "Seizoen"))$Aantalwedstrijden) + game_round
       model_with_old_params <- create_models_for_game_round(model_input, mean_games - game_round, all_models[[game_round]], threshold = 0.05)
-      all_models[[game_round + 1]] <- create_models_for_game_round(model_input, mean_games - game_round, fixed_model = model_with_old_params)
-      browser()
+      all_models[[game_round + 1]] <- create_models_for_game_round(model_input, mean_games - game_round, fixed_model = model_with_old_params, threshold = 0.01)
     } else {
       model_input <- create_model_input(aggregated_football_data, aggregated_transfermarkt_data, aggregated_football_data, is_new_data = FALSE)
       mean_games <- mean(right_join(aggregated_football_data, model_input, by = c("Team", "Competitie", "Seizoen"))$Aantalwedstrijden) + game_round

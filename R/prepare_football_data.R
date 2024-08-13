@@ -1,5 +1,5 @@
 prepare_football_data <- function(df_football_data, competitie, seizoen, start_date, level, namen) {
-  df_football_data <- df_football_data[nchar(as.character(df_football_data$Div)) > 0, ]
+  df_football_data <- df_football_data[nchar(df_football_data[[1]]) > 0, ]
   
   if(is.null(df_football_data$HS)) {
     df_football_data$HS <- NA
@@ -27,6 +27,7 @@ prepare_football_data <- function(df_football_data, competitie, seizoen, start_d
   away_order <- c(2, 1, 4, 3, 6, 5, 8, 7, 10, 9, 11)
   temp_data_uit <- temp_data_thuis
   colnames(temp_data_uit) <- colnames(temp_data_uit)[away_order]
+  
   temp_data <- rbind(temp_data_thuis, temp_data_uit) %>%
     arrange(Wedstrijdnummer) %>%
     group_by(HomeTeam) %>%
