@@ -27,7 +27,8 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
         }
         
         current_standings <- calculate_standings(played_matches) %>%
-          right_join(data.frame(Team = all_teams), by = "Team")
+          right_join(data.frame(Team = all_teams), by = "Team") %>%
+          arrange(Team)
         current_standings[is.na(current_standings)] <- 0
         
         matches_to_simulate <- expand.grid(HomeTeam = all_teams, AwayTeam = all_teams, stringsAsFactors = FALSE) %>%
