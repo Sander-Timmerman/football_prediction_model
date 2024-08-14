@@ -12,7 +12,8 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current
                         use_rvest = TRUE,
                         stop_if_failed = TRUE, 
                         object_to_save = player_jsons, 
-                        object_name = "player_jsons")
+                        object_name = "player_jsons",
+                        run_number)
     club_urls <- html_nodes(webpage, "#yw1 .no-border-links a:nth-child(1)") %>% html_attr("href")
     club_urls <- paste0("http://www.transfermarkt.com", gsub("startseite", "kader", club_urls), "/plus/1")
     for(club_url in club_urls) {
@@ -20,7 +21,8 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current
                                use_rvest = TRUE,
                                stop_if_failed = TRUE, 
                                object_to_save = player_jsons, 
-                               object_name = "player_jsons")
+                               object_name = "player_jsons",
+                               run_number)
       club_name <- html_nodes(webpage_club, ".data-header__headline-wrapper--oswald") %>% html_text()
       club_name <- substr(club_name, 14, nchar(club_name) - 8)
       flog.debug(paste0("Collecting data for club ", club_name))
@@ -44,7 +46,8 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current
                                                                    use_rvest = FALSE,
                                                                    stop_if_failed = TRUE, 
                                                                    object_to_save = player_jsons, 
-                                                                   object_name = "player_jsons"))
+                                                                   object_name = "player_jsons",
+                                                                   run_number))
             }
           market_value <- determine_market_value(player_jsons[[player_id]], start_date, maanden)
           market_values <- c(market_values, market_value)
