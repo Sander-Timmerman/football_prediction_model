@@ -9,7 +9,7 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
         prediction_competition <- prediction %>%
           filter(Competitie == competition) %>%
           arrange(Team)
-        all_teams <- unique(prediction_competition$Team)
+        all_teams <- sort(unique(prediction_competition$Team))
         n_teams <- length(all_teams)
         
         if(nrow(football_data_new) > 0) {
@@ -69,8 +69,10 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
         close(pb)
         
         results_table <- create_results_table(all_simulations, settings$n_sims, prediction_competition)
+        
         if(settings$write_results) {
           write.xlsx(results_table, file.path("output", run_number, paste0("results_table_", competition, ".xlsx")))
+          save_results_table_as_html(results_table, file.path("output", run_number, paste0("results_table_", competition, ".html")))
           flog.info(paste0("Written results table for competition ", competition, " in the output folder"))
         }
         results_table

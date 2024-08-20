@@ -5,6 +5,7 @@ create_results_table <- function(all_simulations, n_sims, prediction_competition
     summarise(Positie = mean(Rank),
               Punten = mean(Punten)) %>%
     mutate(Rating = prediction_competition$Punten) %>%
+    mutate(Team = sort(Team)) %>%
     cbind(results_table) %>%
     arrange(Positie)
   rownames(results_table) <- NULL
