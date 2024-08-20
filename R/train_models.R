@@ -68,12 +68,12 @@ train_models <- function(input_data, namen, aggregated_football_data_cache, run_
           select(-(Points.x : Goals.y))
       model_input <- add_in_season_info(model_input, aggregated_football_data_passed) %>%
         select(-Aantalwedstrijden)
-      mean_games <- mean(right_join(aggregated_football_data_to_come, model_input, by = c("Team", "Competitie", "Seizoen"))$Aantalwedstrijden) + game_round
-      model_with_old_params <- create_models_for_game_round(model_input, mean_games - game_round, all_models[[game_round]], threshold = 0.05)
-      all_models[[game_round + 1]] <- create_models_for_game_round(model_input, mean_games - game_round, fixed_model = model_with_old_params, threshold = 0.01)
+      mean_games <- mean(right_join(aggregated_football_data_to_come, model_input, by = c("Team", "Competitie", "Seizoen"))$Aantalwedstrijden)
+      model_with_old_params <- create_models_for_game_round(model_input, mean_games, all_models[[game_round]], threshold = 0.05)
+      all_models[[game_round + 1]] <- create_models_for_game_round(model_input, mean_games, fixed_model = model_with_old_params, threshold = 0.01)
     } else {
       model_input <- create_model_input(aggregated_football_data, aggregated_transfermarkt_data, aggregated_football_data, is_new_data = FALSE)
-      mean_games <- mean(right_join(aggregated_football_data, model_input, by = c("Team", "Competitie", "Seizoen"))$Aantalwedstrijden) + game_round
+      mean_games <- mean(right_join(aggregated_football_data, model_input, by = c("Team", "Competitie", "Seizoen"))$Aantalwedstrijden)
       all_models[[game_round + 1]] <- create_models_for_game_round(model_input, mean_games)
       } 
     flog.info(paste0("Created model for game round ", game_round))
