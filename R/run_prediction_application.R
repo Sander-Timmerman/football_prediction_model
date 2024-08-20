@@ -6,7 +6,8 @@ run_prediction_application <- function(football_data_cache = NULL,
                                        transfermarkt_data_new_cache = NULL,
                                        all_final_standings_cache = NULL,
                                        n_sims = 10000,
-                                       write_results = TRUE) {
+                                       write_results = TRUE,
+                                       competitions = "all") {
   output <- tryCatch(
     {
       param_json <- convert_parameters_to_json(match.call())
@@ -20,7 +21,7 @@ run_prediction_application <- function(football_data_cache = NULL,
                                               transfermarkt_data_new_cache,
                                               all_final_standings_cache)
       local_input <- load_local_input()
-      settings <- load_settings(n_sims, write_results)
+      settings <- load_settings(n_sims, write_results, competitions)
       
       output <- run_prediction(all_cache_numbers, local_input, settings, run_number)
       flog.info("Application run finished successfully")

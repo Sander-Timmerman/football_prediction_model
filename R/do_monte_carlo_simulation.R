@@ -1,7 +1,8 @@
 do_monte_carlo_simulation <- function(prediction, football_data_new, namen, settings, run_number, competition_parameters) {
   all_results_tables <- list()
   flog.info("Starting Monte Carlo simulations")
-  for(competition in unique(prediction$Competitie)) {
+  competitions <- if(settings$competitions[1] == "all") unique(prediction$Competitie) else intersect(settings$competitions, unique(prediction$Competitie))
+  for(competition in competitions) {
     flog.info(paste0("Starting Monte Carlo simulation for competition ", competition))
     results_table <- tryCatch(
       {
@@ -17,6 +18,7 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
             select(HomeTeam, AwayTeam, FTHG, FTAG, HPts, APts) %>%
             mutate(HomeTeam = mgsub(as.character(HomeTeam), namen$Football_data, namen$Transfermarkt),
                    AwayTeam = mgsub(as.character(AwayTeam), namen$Football_data, namen$Transfermarkt))
+          flog.info(paste0("The number of played matches in this competition is ", nrow(played_matches)))
         } else {
           played_matches <- data.frame(HomeTeam = character(),
                                        AwayTeam = character(),
@@ -24,6 +26,7 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
                                        FTAG = integer(),
                                        HPts = integer(),
                                        APts = integer())
+          flog.info("No matches played in this competition yet")
         }
         
         current_standings <- calculate_standings(played_matches) %>%

@@ -52,19 +52,33 @@ create_current_season_prediction <- function(aggregated_football_data_old, input
     predicted_outcome <- calculate_predicted_outcomes(match_expectations)
     
     football_data_game_round <- football_data_new %>%
+      mutate(Home_away = row_number() %% 2) %>%
       filter(Aantal <= game_round)
     goal_expectations <- goal_expectations %>%
       mutate(Team = mgsub(as.character(prediction$Team), as.character(namen$Transfermarkt), as.character(namen$Football_data), fixed = TRUE))
-    match_expectations <- calculate_match_expectations(football_data_game_round[seq(1, nrow(football_data_game_round), by = 2), ], goal_expectations, 1.35, competition_parameters$home_advantage) %>%
+    match_expectations <- football_data_game_round %>%
+      filter(Home_away == 1) %>% 
+      calculate_match_expectations(goal_expectations, 1.35, competition_parameters$home_advantage) %>%
       mutate(HomePoints = Home_prob * 3 + Draw_prob,
              AwayPoints = Away_prob * 3 + Draw_prob,
              Goals = (ExpHG + ExpAG) / 1.35) %>%
       select(HomeTeam, AwayTeam, Wedstrijdnummer, Competitie, Seizoen, HomePoints, AwayPoints, Goals)
     football_data_game_round <- football_data_game_round %>%
       full_join(match_expectations, by = c("HomeTeam", "AwayTeam", "Wedstrijdnummer", "Competitie", "Seizoen"))
-    football_data_game_round$HomePoints[seq(2, nrow(football_data_game_round), by = 2)] <- football_data_game_round$AwayPoints[seq(1, nrow(football_data_game_round), by = 2)]
-    football_data_game_round$AwayPoints[seq(2, nrow(football_data_game_round), by = 2)] <- football_data_game_round$HomePoints[seq(1, nrow(football_data_game_round), by = 2)]
-    football_data_game_round$Goals[seq(2, nrow(football_data_game_round), by = 2)] <- football_data_game_round$Goals[seq(1, nrow(football_data_game_round), by = 2)]
+    match_expectations <- football_data_game_round %>%
+      filter(Home_away == 0) %>% 
+      calculate_match_expectations(goal_expectations, 1.35, 2 - competition_parameters$home_advantage) %>%
+      mutate(HomePoints = Home_prob * 3 + Draw_prob,
+             AwayPoints = Away_prob * 3 + Draw_prob,
+             Goals = (ExpHG + ExpAG) / 1.35) %>%
+      select(HomeTeam, AwayTeam, Wedstrijdnummer, Competitie, Seizoen, HomePoints, AwayPoints, Goals)
+    football_data_game_round <- football_data_game_round %>%
+      full_join(match_expectations, by = c("HomeTeam", "AwayTeam", "Wedstrijdnummer", "Competitie", "Seizoen")) %>%
+      mutate(HomePoints = coalesce(HomePoints.x, HomePoints.y),
+             AwayPoints = coalesce(AwayPoints.x, AwayPoints.y),
+             Goals = coalesce(Goals.x, Goals.y)) %>%
+      select(-(HomePoints.x : Goals.y))
+    
     predicted_outcome_passed <- calculate_predicted_outcomes(football_data_game_round) %>%
       mutate(Team = mgsub(as.character(Team), namen$Football_data, namen$Transfermarkt))
     aggregated_football_data_passed <- aggregate_football_data(football_data_game_round, namen) %>%
