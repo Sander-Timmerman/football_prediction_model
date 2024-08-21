@@ -24,9 +24,12 @@ predict_next_game_round <- function(prediction, data_source_info, settings, run_
               by = "Competition")
   goal_expectations <- calculate_goal_expectations(prediction, competition_parameters$points_to_goalratio)
   match_expectations <- calculate_match_expectations(df_matches, goal_expectations, df_matches$Goals_per_match, competition_parameters$home_advantage) %>%
-    select(-Goals_per_match)
+    select(-c(Goals_per_match, Seizoen))
+  colnames(match_expectations) <- c("Thuisploeg", "Uitploeg", "Competitie", "Thuisgoals", "Uitgoals", "Thuiswinst", "Gelijk", "Uitwinst")
+  
   if(settings$write_results) {
     write.xlsx(match_expectations, file.path("output", run_number, paste0("match_expectations.xlsx")))
+    save_match_expectations_as_html(match_expectations, file.path("output", run_number, paste0("match_expectations.html")))
     flog.info(paste0("Written match expectations in the output folder"))
   }
   return(match_expectations)
