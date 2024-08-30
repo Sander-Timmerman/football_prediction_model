@@ -27,6 +27,7 @@ create_current_season_prediction <- function(aggregated_football_data_old, input
                            Goals_sd = ifelse(is.na(model_input$Schotsaldo_vorig_seizoen),
                                              all_models[[1]]$goals$without_shots$performance,
                                              all_models[[1]]$goals$with_shots$performance))
+  last_prediction <- prediction
   all_predictions <- prediction
   all_matches <- model_input %>%
     group_by(Competitie, Seizoen) %>%
@@ -38,7 +39,7 @@ create_current_season_prediction <- function(aggregated_football_data_old, input
     }) %>%
     ungroup()
   for(game_round in seq_len(max(football_data_new$Aantalwedstrijden))) {
-    goal_expectations <- calculate_goal_expectations(prediction, competition_parameters$points_to_goalratio)
+    goal_expectations <- calculate_goal_expectations(last_prediction, competition_parameters$points_to_goalratio)
     match_expectations <- calculate_match_expectations(all_matches, goal_expectations, 1.35, competition_parameters$home_advantage) %>%
       mutate(HomePoints = Home_prob * 3 + Draw_prob,
              AwayPoints = Away_prob * 3 + Draw_prob,
@@ -55,7 +56,7 @@ create_current_season_prediction <- function(aggregated_football_data_old, input
       mutate(Home_away = row_number() %% 2) %>%
       filter(Aantal <= game_round)
     goal_expectations <- goal_expectations %>%
-      mutate(Team = mgsub(as.character(prediction$Team), as.character(namen$Transfermarkt), as.character(namen$Football_data), fixed = TRUE))
+      mutate(Team = mgsub(as.character(last_prediction$Team), as.character(namen$Transfermarkt), as.character(namen$Football_data), fixed = TRUE))
     match_expectations <- football_data_game_round %>%
       filter(Home_away == 1) %>% 
       calculate_match_expectations(goal_expectations, 1.35, competition_parameters$home_advantage) %>%
@@ -106,17 +107,16 @@ create_current_season_prediction <- function(aggregated_football_data_old, input
                                                all_models[[game_round + 1]]$goals$without_shots$performance,
                                                all_models[[game_round + 1]]$goals$with_shots$performance))
     all_predictions <- rbind(all_predictions, prediction)
+    last_prediction <- all_predictions %>%
+      group_by(Team) %>%
+      slice_tail(n = 1) %>%
+      ungroup()
   }
   
-  all_predictions <- all_predictions %>%
-    group_by(Team) %>%
-    slice_tail(n = 1) %>%
-    ungroup()
-
   if(write_results) {
-    write.xlsx(all_predictions, file.path("output", run_number, paste0("ratings.xlsx")))
+    write.xlsx(last_prediction, file.path("output", run_number, paste0("ratings.xlsx")))
     flog.info(paste0("Written predicted future points and goals in the output folder"))
   }
   
-  return(all_predictions)
+  return(last_prediction)
 }
