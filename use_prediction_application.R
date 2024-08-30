@@ -5,6 +5,7 @@ library(futile.logger)
 library(rvest)
 library(rjson)
 library(xlsx)
+library(gt)
 
 rm(list = ls())
 options(dplyr.summarise.inform = FALSE)

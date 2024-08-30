@@ -4,7 +4,7 @@ run_prediction <- function(all_cache_numbers, local_input, settings, run_number)
                                              all_cache_numbers$aggregated_football_data_cache, 
                                              all_cache_numbers$transfermarkt_data_cache, 
                                              all_cache_numbers$player_jsons_cache,
-                                             all_final_standings_cache = NULL,
+                                             all_cache_numbers$all_final_standings_cache,
                                              run_number,
                                              local_input,
                                              is_current_season = FALSE,
@@ -21,7 +21,8 @@ run_prediction <- function(all_cache_numbers, local_input, settings, run_number)
                                           input_data_past_seasons, 
                                           local_input$names,
                                           all_cache_numbers$aggregated_football_data_cache,
-                                          run_number)
+                                          run_number,
+                                          competition_parameters)
   
   input_data_this_season <- load_input_data(football_data_cache = NULL, 
                                             aggregated_football_data_cache = NULL, 
@@ -37,7 +38,9 @@ run_prediction <- function(all_cache_numbers, local_input, settings, run_number)
                                                  input_data_this_season,
                                                  all_models,
                                                  settings$write_results,
-                                                 run_number)
+                                                 run_number,
+                                                 competition_parameters,
+                                                 local_input$names)
   
   next_game_round_prediction <- predict_next_game_round(select(prediction, -c(Punten_sd, Goals_sd)), 
                                                         local_input$data_source_info, 
@@ -55,5 +58,9 @@ run_prediction <- function(all_cache_numbers, local_input, settings, run_number)
   output <- list(all_results_tables = all_results_tables,
                  prediction = prediction,
                  next_game_round_prediction = next_game_round_prediction)
+  
+  saveRDS(output, file = file.path("output", run_number, "output.rds"))
+  flog.info(paste0("Saved output"))
+  
   return(output)
 }

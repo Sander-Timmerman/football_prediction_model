@@ -17,13 +17,21 @@ load_input_data <- function(football_data_cache, aggregated_football_data_cache,
                                                         aggregate_football_data, 
                                                         football_data, 
                                                         local_input$names)
+  
+  if(!is_current_season) {
+    aggregated_level_two_data <- aggregate_level_two_final_standings(all_final_standings_cache, 
+                                                                     local_input$data_source_info, 
+                                                                     is_current_season, 
+                                                                     run_number, 
+                                                                     current_season)
+    aggregated_level_two_data[setdiff(colnames(aggregated_football_data), colnames(aggregated_level_two_data))] <- NA
+    aggregated_level_two_data <- aggregated_level_two_data[colnames(aggregated_football_data)]
+    aggregated_football_data <- rbind(aggregated_football_data, aggregated_level_two_data) %>%
+      mutate(Seizoen = as.integer(Seizoen))
+  }
+  
   input_data$football_data <- football_data
   input_data$aggregated_football_data <- aggregated_football_data
-  
-  if(is_current_season) {
-    aggregated_level_two_data <- aggregate_level_two_final_standings(all_final_standings_cache, local_input$data_source_info, is_current_season, run_number)
-    input_data$aggregated_level_two_data <- aggregated_level_two_data
-  }
   
   player_jsons <- if(is_current_season) list() else use_function_with_caching(player_jsons_cache, 
                                                                               "player_jsons", 

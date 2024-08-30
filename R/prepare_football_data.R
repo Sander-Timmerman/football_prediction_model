@@ -1,5 +1,5 @@
-prepare_football_data <- function(df_football_data, competitie, seizoen, start_date, level) {
-  df_football_data <- df_football_data[nchar(as.character(df_football_data$Div)) > 0, ]
+prepare_football_data <- function(df_football_data, competitie, seizoen, start_date, level, namen) {
+  df_football_data <- df_football_data[nchar(df_football_data[[1]]) > 0, ]
   
   if(is.null(df_football_data$HS)) {
     df_football_data$HS <- NA
@@ -7,6 +7,17 @@ prepare_football_data <- function(df_football_data, competitie, seizoen, start_d
     df_football_data$HST <- NA
     df_football_data$AST <- NA
   }
+  
+  if(any((!df_football_data$HomeTeam %in% namen$Football_data |
+          !df_football_data$AwayTeam %in% namen$Football_data) &
+         level == 1)) {
+    flog.warn(paste0("At least one team has an unknown name in football_data for competition ", 
+                     competitie,
+                     " and season ", 
+                     seizoen,
+                     ". This might cause problems when joining with Transfermarkt data"))
+  }
+  
   temp_data_thuis <- df_football_data %>%
     select(HomeTeam, AwayTeam, FTHG, FTAG, FTR, HS, AS, HST, AST) %>%
     mutate(HPts = ifelse(FTR == "H", 3, ifelse(FTR == "A", 0, 1)),
@@ -16,6 +27,7 @@ prepare_football_data <- function(df_football_data, competitie, seizoen, start_d
   away_order <- c(2, 1, 4, 3, 6, 5, 8, 7, 10, 9, 11)
   temp_data_uit <- temp_data_thuis
   colnames(temp_data_uit) <- colnames(temp_data_uit)[away_order]
+  
   temp_data <- rbind(temp_data_thuis, temp_data_uit) %>%
     arrange(Wedstrijdnummer) %>%
     group_by(HomeTeam) %>%

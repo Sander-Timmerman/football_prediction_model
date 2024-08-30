@@ -1,7 +1,7 @@
 calculate_match_expectations <- function(matches_to_simulate, goal_expectations, goals_per_match, home_advantage = 1.1375) {
   matches_to_simulate <- matches_to_simulate %>%
-    inner_join(goal_expectations, by=c("HomeTeam"="Team")) %>%
-    inner_join(goal_expectations, by=c("AwayTeam"="Team")) %>%
+    inner_join(goal_expectations, by=c("HomeTeam"="Team", "Seizoen")) %>%
+    inner_join(goal_expectations, by=c("AwayTeam"="Team", "Seizoen")) %>%
     mutate(Home_advantage = home_advantage,
            ExpHG = Doelpuntenvoor.x * Doelpuntentegen.y * Home_advantage * goals_per_match,
            ExpAG = Doelpuntenvoor.y * Doelpuntentegen.x * (2 - Home_advantage) * goals_per_match) %>%
@@ -11,8 +11,8 @@ calculate_match_expectations <- function(matches_to_simulate, goal_expectations,
   n_matches <- nrow(matches_to_simulate)
   all_probs <- NULL
   for(row in seq_len(n_matches)) {
-    goal_prob_mat <- outer(dpois(0:10, matches_to_simulate[row, "ExpHG"]), 
-                           dpois(0:10, matches_to_simulate[row, "ExpAG"]))
+    goal_prob_mat <- outer(dpois(0:10, as.numeric(matches_to_simulate[row, "ExpHG"])), 
+                           dpois(0:10, as.numeric(matches_to_simulate[row, "ExpAG"])))
     
     home_prob <- sum(goal_prob_mat[lower.tri(goal_prob_mat)]) - 
       0.05 * sum(goal_prob_mat[row(goal_prob_mat) == col(goal_prob_mat) + 1])

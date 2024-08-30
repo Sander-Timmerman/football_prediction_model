@@ -1,6 +1,8 @@
 create_model_input <- function(aggregated_football_data, aggregated_transfermarkt_data, aggregated_football_data_to_come, is_new_data) {
   aggregated_football_data_last_season <- aggregated_football_data %>%
-    mutate(Seizoen = Seizoen + 1) %>%
+    mutate(Seizoen = ifelse(Team == "Gil Vicente FC" & Seizoen == 18,
+                            Seizoen + 2,
+                            Seizoen + 1)) %>%
     select(-Aantalwedstrijden)
   first_data_column <- 4
   

@@ -1,4 +1,4 @@
-create_model_with_and_without_shots <- function(model_input, mean_games, perfect_variance_one_game, old_model = NULL, fixed_model = NULL, threshold = 0.01) {
+create_model_with_and_without_shots <- function(model_input, mean_games, perfect_variance_one_game, old_model = NULL, fixed_model = NULL, threshold = 0.01, non_removable_variables = NULL) {
   models <- list()
   for(with_or_without in c("with_shots", "without_shots")) {
     if(!is.null(old_model)) {
@@ -8,7 +8,8 @@ create_model_with_and_without_shots <- function(model_input, mean_games, perfect
       model_input_with_without <- model_input
     }
     
-    non_removable_variables <- names(fixed_model[[with_or_without]]$coefficients)[-1]
+    non_removable_variables <- c(non_removable_variables, 
+                                 names(fixed_model[[with_or_without]]$coefficients)[-1])
     
     if(with_or_without == "without_shots") {
       shots_last_season <- which(substr(colnames(model_input_with_without), 1, 5) == "Schot" & 
