@@ -1,5 +1,5 @@
 aggregate_football_data <- function(football_data, namen) {
-  flog.info("Starts aggregating data from football_data")
+  flog.debug("Starts aggregating data from football_data")
 
   aggregated_football_data <- football_data %>%
     group_by(Competitie, Seizoen, Niveau) %>%
@@ -29,6 +29,6 @@ aggregate_football_data <- function(football_data, namen) {
     select(-c(Doelpuntenvoor, Doelpuntentegen, Schotenvoor, Schotentegen, Schotenopdoelvoor, Schotenopdoeltegen)) %>%
     rename("Team" = "HomeTeam") %>%
     mutate(Team = mgsub(as.character(Team), namen$Football_data, namen$Transfermarkt))
-  flog.info("Finished aggregating data from football_data")
+  flog.debug("Finished aggregating data from football_data")
   return(aggregated_football_data)
 }

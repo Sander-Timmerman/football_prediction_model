@@ -9,6 +9,10 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
         prediction_competition <- prediction %>%
           filter(Competitie == competition) %>%
           arrange(Team)
+        if(any(is.na(prediction_competition))) {
+          stop("There are NA's in the prediction of this competition")
+        }
+        
         all_teams <- pull(arrange(data.frame(Team = unique(prediction_competition$Team))), Team)
         n_teams <- length(all_teams)
         

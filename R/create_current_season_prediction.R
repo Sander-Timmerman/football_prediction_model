@@ -34,7 +34,7 @@ create_current_season_prediction <- function(aggregated_football_data_old, input
     do({
       team_combinations <- expand.grid(HomeTeam = .$Team, AwayTeam = .$Team)
       team_combinations <- team_combinations %>%
-        filter(HomeTeam != AwayTeam) # Exclude matches where a team plays itself
+        filter(HomeTeam != AwayTeam)
       team_combinations
     }) %>%
     ungroup()
@@ -106,6 +106,16 @@ create_current_season_prediction <- function(aggregated_football_data_old, input
                              Goals_sd = ifelse(is.na(model_input_game_round$Schotsaldo_vorig_seizoen),
                                                all_models[[game_round + 1]]$goals$without_shots$performance,
                                                all_models[[game_round + 1]]$goals$with_shots$performance))
+
+    if(any(is.na(prediction))) {
+      flog.warn(paste0("There are NA values in game round ", 
+                       game_round, 
+                       " for the following teams: ",
+                       paste0(prediction$Team[which(!complete.cases(prediction))], collapse = ", "),
+                       ". The prediction based on this game round will be ignored"))
+      prediction <- na.omit(prediction)
+    }
+    
     all_predictions <- rbind(all_predictions, prediction)
     last_prediction <- all_predictions %>%
       group_by(Team) %>%
