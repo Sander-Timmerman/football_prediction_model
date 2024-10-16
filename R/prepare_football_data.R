@@ -18,6 +18,13 @@ prepare_football_data <- function(df_football_data, competitie, seizoen, start_d
                      ". This might cause problems when joining with Transfermarkt data"))
   }
   
+  if(competitie == "Belgie" & seizoen == 25) {
+    df_football_data$HS[69] <- 16
+    df_football_data$AS[69] <- 4
+    df_football_data$HST[69] <- 6
+    df_football_data$AST[69] <- 1
+  }
+  
   temp_data_thuis <- df_football_data %>%
     select(HomeTeam, AwayTeam, FTHG, FTAG, FTR, HS, AS, HST, AST) %>%
     mutate(HPts = ifelse(FTR == "H", 3, ifelse(FTR == "A", 0, 1)),
@@ -38,5 +45,6 @@ prepare_football_data <- function(df_football_data, competitie, seizoen, start_d
            Startdatum = start_date,
            Niveau = level) %>%
     ungroup()
+
   return(temp_data)
 }

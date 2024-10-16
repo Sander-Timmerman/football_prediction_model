@@ -59,8 +59,10 @@ run_prediction <- function(all_cache_numbers, local_input, settings, run_number)
                  prediction = prediction,
                  next_game_round_prediction = next_game_round_prediction)
   
-  saveRDS(output, file = file.path("output", run_number, "output.rds"))
-  flog.info(paste0("Saved output"))
+  if(settings$write_results) {
+    saveRDS(output, file = file.path("output", run_number, "output.rds"))
+    flog.info(paste0("Saved output"))
+  }
   
   return(output)
 }
