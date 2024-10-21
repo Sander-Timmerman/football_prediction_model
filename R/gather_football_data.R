@@ -25,16 +25,7 @@ gather_football_data <- function(urls_fd, local_input) {
       prepare_football_data(urls_fd[i, 1], urls_fd[i, 2], urls_fd[i, 3], local_input)
     
     if(nrow(df_football_data) > 0) {
-      start_date <- determine_start_date(df_football_data)
-      if(is.na(start_date)) {
-        flog.error(paste0("Unknown date format in football_data csv for competition ",
-                          urls_fd[i, 1],
-                          ", season ",
-                          urls_fd[i, 2],
-                          ", level ",
-                          urls_fd[i, 3]))
-        next
-      }
+      start_date <- min(df_football_data$Date, na.rm = TRUE)
       temp_data <- transform_football_data(df_football_data, urls_fd[i, 1], urls_fd[i, 2], urls_fd[i, 3], start_date)
       all_data <- rbind(all_data, temp_data)
     }

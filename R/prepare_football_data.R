@@ -8,7 +8,9 @@ prepare_football_data <- function(df_football_data, competitie, seizoen, level, 
     df_football_data$AST <- NA
   }
   
-  df_football_data <- add_additional_football_data(df_football_data, local_input$additional_football_data, competitie, seizoen)
+  df_football_data <- df_football_data %>%
+    add_additional_football_data(local_input$additional_football_data, competitie, seizoen, level) %>%
+    convert_football_data_date(competitie, seizoen, level)
   
   if(any((!df_football_data$HomeTeam %in% local_input$names$Football_data |
           !df_football_data$AwayTeam %in% local_input$names$Football_data) &
