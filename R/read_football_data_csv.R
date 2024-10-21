@@ -14,7 +14,15 @@ read_football_data_csv <- function(url, competition, season) {
                            url,
                            " has no football_data available, returning empty data frame"))
           }
-      return(data.frame())
+      return(data.frame(HomeTeam = character(0), 
+                        AwayTeam = character(0), 
+                        FTHG = numeric(0), 
+                        FTAG = numeric(0), 
+                        FTR = character(0), 
+                        HS = numeric(0), 
+                        AS = numeric(0), 
+                        HST = numeric(0), 
+                        AST = numeric(0)))
     }
   )
   return(df_football_data)

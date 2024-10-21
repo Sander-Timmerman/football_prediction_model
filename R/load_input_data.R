@@ -10,7 +10,7 @@ load_input_data <- function(football_data_cache, aggregated_football_data_cache,
                                              run_number,
                                              gather_football_data, 
                                              urls_fd, 
-                                             local_input$names)
+                                             local_input)
   aggregated_football_data <- use_function_with_caching(aggregated_football_data_cache, 
                                                         paste0("aggregated_football_data_", period_used),
                                                         run_number,
