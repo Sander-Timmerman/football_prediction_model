@@ -14,16 +14,24 @@ gather_transfermarkt_data <- function(urls_tm, player_jsons = list(), is_current
                         object_to_save = player_jsons, 
                         object_name = "player_jsons",
                         run_number)
+    
     club_urls <- html_nodes(webpage, "#yw1 .no-border-links a:nth-child(1)") %>% html_attr("href")
     club_urls <- paste0("http://www.transfermarkt.com", gsub("startseite", "kader", club_urls), "/plus/1")
     for(club_url in club_urls) {
-      webpage_club <- read_url(club_url, 
-                               use_rvest = TRUE,
-                               stop_if_failed = TRUE, 
-                               object_to_save = player_jsons, 
-                               object_name = "player_jsons",
-                               run_number)
-      club_name <- html_nodes(webpage_club, ".data-header__headline-wrapper--oswald") %>% html_text()
+      club_name <- character(0)
+      while(length(club_name) == 0) {
+        webpage_club <- read_url(club_url, 
+                                 use_rvest = TRUE,
+                                 stop_if_failed = TRUE, 
+                                 object_to_save = player_jsons, 
+                                 object_name = "player_jsons",
+                                 run_number)
+        club_name <- html_nodes(webpage_club, ".data-header__headline-wrapper--oswald") %>% html_text()
+        
+        if(length(club_name) == 0) {
+          flog.debug("No information, retrying")
+        }
+      }
       club_name <- substr(club_name, 14, nchar(club_name) - 8)
       flog.debug(paste0("Collecting data for club ", club_name))
       player_names <- html_nodes(webpage_club, ".inline-table a") %>% html_text()

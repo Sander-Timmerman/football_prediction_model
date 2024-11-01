@@ -4,15 +4,19 @@ predict_next_game_round <- function(prediction, data_source_info, settings, run_
   home_teams <- character()
   away_teams <- character()
   competitions <- character()
-
+  
   for(row in seq_len(nrow(urls_tm))) {
     webpage <- read_url(as.character(urls_tm[row, 4]), use_rvest = TRUE)
     if(is.null(webpage)) next
     matches <- html_nodes(webpage, ".hauptlink.hide-for-small a") %>%
       html_text()
-    home_teams <- c(home_teams, matches[seq(1, length(matches) - 1, 2)])
-    away_teams <- c(away_teams, matches[seq(2, length(matches), 2)])
-    competitions <- c(competitions, rep(as.character(urls_tm[row, 1]), length(matches) / 2))
+    if(length(matches) > 1) {
+      home_teams <- c(home_teams, matches[seq(1, length(matches) - 1, 2)])
+      away_teams <- c(away_teams, matches[seq(2, length(matches), 2)])
+      competitions <- c(competitions, rep(as.character(urls_tm[row, 1]), length(matches) / 2))
+    } else {
+      flog.warn(paste0("No match information in competition ", as.character(urls_tm[row, 1])))
+    }
   }
   
   df_matches <- data.frame(HomeTeam = home_teams,
