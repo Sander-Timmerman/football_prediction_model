@@ -1,4 +1,4 @@
-calculate_match_expectations <- function(matches_to_simulate, goal_expectations, goals_per_match, home_advantage = 1.1375) {
+calculate_match_expectations <- function(matches_to_simulate, goal_expectations, goals_per_match = 1.3889, home_advantage = 1.1192) {
   matches_to_simulate <- matches_to_simulate %>%
     inner_join(goal_expectations, by=c("HomeTeam"="Team", "Seizoen")) %>%
     inner_join(goal_expectations, by=c("AwayTeam"="Team", "Seizoen")) %>%
