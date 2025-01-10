@@ -1,6 +1,6 @@
 read_football_data_csv <- function(url, competition, season) {
   df_football_data <- tryCatch({
-    csv <- suppressWarnings(read.csv(url, stringsAsFactors = FALSE))
+    csv <- suppressWarnings(read.csv(url, fileEncoding = "UTF-8", stringsAsFactors = FALSE))
     flog.debug(paste0("Succesfully read football_data csv with url ", url))
     return(csv)
   },
@@ -14,7 +14,8 @@ read_football_data_csv <- function(url, competition, season) {
                            url,
                            " has no football_data available, returning empty data frame"))
           }
-      return(data.frame(HomeTeam = character(0), 
+      return(data.frame(Date = character(0),
+                        HomeTeam = character(0), 
                         AwayTeam = character(0), 
                         FTHG = numeric(0), 
                         FTAG = numeric(0), 
