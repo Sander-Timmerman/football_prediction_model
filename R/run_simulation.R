@@ -1,7 +1,7 @@
 run_simulation <- function(prediction_competition, matches_to_simulate, current_standings, competition_parameters) {
   prediction_simulation <- prediction_competition %>%
-    mutate(Punten = rnorm(nrow(prediction_competition), mean = Punten, sd = Punten_sd),
-           Goals = rnorm(nrow(prediction_competition), mean = Goals, sd = Goals_sd)) %>%
+    mutate(Punten = rnorm(nrow(prediction_competition), mean = Punten, sd = max(0, Punten_sd)),
+           Goals = rnorm(nrow(prediction_competition), mean = Goals, sd = max(0, Goals_sd))) %>%
     select(-Punten_sd, -Goals_sd) %>%
     calculate_goal_expectations(competition_parameters$points_to_goalratio)
   
