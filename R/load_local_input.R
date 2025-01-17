@@ -5,5 +5,6 @@ load_local_input <- function() {
   local_input$months <- read.csv("input/maanden.csv", colClasses = c(rep("character", 2)))
   local_input$additional_football_data <- read.csv("input/additional_football_data.csv", stringsAsFactors = FALSE)
   local_input$teams_to_ignore <- read.csv("input/teams_to_ignore.csv", stringsAsFactors = FALSE)
+  local_input$non_played_matches <- read.csv("input/non_played_matches.csv", stringsAsFactors = FALSE)
   return(local_input)
 }

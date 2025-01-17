@@ -17,6 +17,14 @@ prepare_football_data <- function(df_football_data, competitie, seizoen, level, 
     distinct(HomeTeam, AwayTeam, .keep_all = TRUE) %>%
     filter(!HomeTeam %in% teams_to_ignore$Team & !AwayTeam %in% teams_to_ignore$Team)
   
+  non_played_matches <- local_input$non_played_matches %>%
+    filter(Competitie == competitie & Seizoen == seizoen & Niveau == level) %>%
+    pull(Wedstrijdnummer)
+  
+  if(length(non_played_matches) > 0) {
+    df_football_data <- df_football_data[-non_played_matches, ]
+  }
+
   if(any((!df_football_data$HomeTeam %in% local_input$names$Football_data |
           !df_football_data$AwayTeam %in% local_input$names$Football_data) &
          level == 1)) {
@@ -33,6 +41,7 @@ prepare_football_data <- function(df_football_data, competitie, seizoen, level, 
            is.na(df_football_data$AS), 
            is.na(df_football_data$HST), 
            is.na(df_football_data$AST)) %in% c(0, nrow(df_football_data) * 4))) {
+    
     flog.warn(paste0("The shot data is incomplete for some but not all matches for competition ", 
                      competitie,
                      ", season ", 

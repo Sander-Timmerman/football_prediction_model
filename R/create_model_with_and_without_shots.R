@@ -1,4 +1,4 @@
-create_model_with_and_without_shots <- function(model_input, mean_games, perfect_variance_one_game, old_model = NULL, fixed_model = NULL, threshold = 0.01, non_removable_variables = NULL) {
+create_model_with_and_without_shots <- function(model_input, number_games, perfect_variance_one_game, old_model = NULL, fixed_model = NULL, threshold = 0.01, non_removable_variables = NULL) {
   models <- list()
   for(with_or_without in c("with_shots", "without_shots")) {
     if(!is.null(old_model)) {
@@ -22,9 +22,14 @@ create_model_with_and_without_shots <- function(model_input, mean_games, perfect
         model_input_with_without <- model_input_with_without
       }
     }
-    model_with_without <- fit_model(model_input_with_without, threshold, non_removable_variables)
-    model_with_without$performance <- calculate_model_performance(model_with_without, mean_games, perfect_variance_one_game)
     
+    number_games_this_model <- number_games[which(complete.cases(model_input_with_without))]
+    model_input_with_without <- na.omit(model_input_with_without)
+    
+    model_with_without <- fit_model(model_input_with_without, threshold, non_removable_variables)
+    performance <- calculate_model_performance(model_with_without, number_games_this_model)
+    model_with_without$performance <- performance[1]
+    model_with_without$performance_sd <- performance[2]
     models[[with_or_without]] <- model_with_without
   }
   return(models)
