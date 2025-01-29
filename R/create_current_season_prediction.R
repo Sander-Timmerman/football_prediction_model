@@ -95,17 +95,17 @@ create_current_season_prediction <- function(aggregated_football_data_old, input
                              Competitie = model_input_game_round$Competitie,
                              Seizoen = model_input_game_round$Seizoen,
                              Punten = ifelse(is.na(model_input_game_round$Schotsaldo_vorig_seizoen), 
-                                             predict(all_models[[game_round + 1]]$punten$without_shots, newdata = model_input_game_round), 
-                                             predict(all_models[[game_round + 1]]$punten$with_shots, newdata = model_input_game_round)),
+                                             predict(all_models[[min(22, game_round + 1)]]$punten$without_shots, newdata = model_input_game_round), 
+                                             predict(all_models[[min(22, game_round + 1)]]$punten$with_shots, newdata = model_input_game_round)),
                              Punten_sd = ifelse(is.na(model_input_game_round$Schotsaldo_vorig_seizoen),
-                                                all_models[[game_round + 1]]$punten$without_shots$performance,
-                                                all_models[[game_round + 1]]$punten$with_shots$performance),
+                                                all_models[[min(22, game_round + 1)]]$punten$without_shots$performance,
+                                                all_models[[min(22, game_round + 1)]]$punten$with_shots$performance),
                              Goals = ifelse(is.na(model_input_game_round$Schotsaldo_vorig_seizoen), 
-                                            predict(all_models[[game_round + 1]]$goals$without_shots, newdata = model_input_game_round), 
-                                            predict(all_models[[game_round + 1]]$goals$with_shots, newdata = model_input_game_round)),
+                                            predict(all_models[[min(22, game_round + 1)]]$goals$without_shots, newdata = model_input_game_round), 
+                                            predict(all_models[[min(22, game_round + 1)]]$goals$with_shots, newdata = model_input_game_round)),
                              Goals_sd = ifelse(is.na(model_input_game_round$Schotsaldo_vorig_seizoen),
-                                               all_models[[game_round + 1]]$goals$without_shots$performance,
-                                               all_models[[game_round + 1]]$goals$with_shots$performance))
+                                               all_models[[min(22, game_round + 1)]]$goals$without_shots$performance,
+                                               all_models[[min(22, game_round + 1)]]$goals$with_shots$performance))
 
     if(any(is.na(prediction))) {
       flog.warn(paste0("There are NA values in game round ", 
