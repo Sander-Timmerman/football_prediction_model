@@ -88,6 +88,24 @@ create_current_season_prediction <- function(aggregated_football_data_old, input
       mutate(Schedule_points = Points.x - Points.y,
              Schedule_goals = Goals.x - Goals.y) %>%
       select(-(Points.x : Goals.y))
+    
+    teams_per_competition <- aggregated_football_data_passed %>%
+      group_by(Competitie) %>%
+      summarise(n_teams = n(),
+                Team = if(n_teams == 1) Team else NA) %>%
+      filter(n_teams == 1)
+    if(nrow(teams_per_competition) > 0) {
+      for(row in seq_len(nrow(teams_per_competition))) {
+        flog.warn(paste0("There is only one team (", 
+                         teams_per_competition[row, "Team"],
+                         ") for game round ", 
+                         game_round, 
+                         " in competition ",
+                         teams_per_competition[row, "Competitie"],
+                         ". This can cause less accurate predictions for this team"))
+      }
+    }
+    
     model_input_game_round <- model_input %>%
       add_in_season_info(aggregated_football_data_passed) %>%
       filter(Aantalwedstrijden == game_round)
