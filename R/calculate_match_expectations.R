@@ -9,6 +9,8 @@ calculate_match_expectations <- function(matches_to_simulate, goal_expectations,
     select(-(Doelpuntenvoor.x : Home_advantage))
   
   n_matches <- nrow(matches_to_simulate)
+  if(n_matches == 0) return(matches_to_simulate)
+  
   all_probs <- NULL
   for(row in seq_len(n_matches)) {
     goal_prob_mat <- outer(dpois(0:10, as.numeric(matches_to_simulate[row, "ExpHG"])), 
