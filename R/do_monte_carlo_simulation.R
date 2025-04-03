@@ -72,19 +72,8 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
         }
         close(pb)
         
+        flog.info(paste("Monte Carlo simulation for competition", competition, "succeeded"))
         results_table <- create_results_table(all_simulations, settings$n_sims, prediction_competition)
-        
-        if(settings$write_results) {
-          write.xlsx(results_table, file.path("output", run_number, paste0("results_table_", competition, ".xlsx")))
-          
-          points_per_position <- all_simulations %>% 
-            group_by(Rank) %>% 
-            summarise(Punten = round(mean(Punten), 1)) %>% 
-            pull(Punten)
-          save_results_table_as_html(results_table, points_per_position, blogger_info, run_number, competition)
-          flog.info(paste0("Written results table for competition ", competition, " in the output folder"))
-        }
-        results_table
       },
       error = function(e) {
         flog.error(paste0("Monte Carlo simulation for competition ", competition, " failed. Returning empty dataframe. Error message: ", e))
@@ -92,6 +81,25 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
         return(data.frame())
       }
     )
+    
+    if(settings$write_results) {
+      tryCatch(
+        {
+          write.xlsx(results_table, file.path("output", run_number, paste0("results_table_", competition, ".xlsx")))
+          
+          points_per_position <- all_simulations %>% 
+            group_by(Rank) %>% 
+            summarise(Punten = round(mean(Punten), 1)) %>% 
+            pull(Punten)
+          save_results_table_as_html(results_table, points_per_position, blogger_info, run_number, competition, settings$edit_blogger)
+          flog.info(paste0("Written results table for competition ", competition, " in the output folder"))
+        },
+        error = function(e) {
+          flog.error(paste0("Writing output for competition ", competition, " failed. Prediction is only stored in the R output. Error message: ", e))
+        }
+      )
+    }
+    
     all_results_tables[[competition]] <- results_table
   }
   flog.info("Finished Monte Carlo simulation for all competitions")

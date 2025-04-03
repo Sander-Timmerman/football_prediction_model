@@ -11,7 +11,9 @@ load_settings <- function(n_sims, write_results, competitions, edit_blogger) {
     } else if(!file.exists("blogger_config.json")) {
       edit_blogger <- FALSE
       flog.warn("Blogger config not found, blogger won't be edited")
-      } else settings$edit_blogger <- edit_blogger
+      }
   }
+  settings$edit_blogger <- edit_blogger
+  
   return(settings)
 }
