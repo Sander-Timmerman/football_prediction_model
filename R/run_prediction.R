@@ -1,4 +1,4 @@
-run_prediction <- function(all_cache_numbers, local_input, settings, run_number) {
+run_prediction <- function(all_cache_numbers, local_input, settings, blogger_info, run_number) {
   
   input_data_past_seasons <- load_input_data(all_cache_numbers$football_data_cache, 
                                              all_cache_numbers$aggregated_football_data_cache, 
@@ -44,7 +44,8 @@ run_prediction <- function(all_cache_numbers, local_input, settings, run_number)
   
   next_game_round_prediction <- predict_next_game_round(select(prediction, -c(Punten_sd, Goals_sd)), 
                                                         local_input$data_source_info, 
-                                                        settings, 
+                                                        settings,
+                                                        blogger_info,
                                                         run_number,
                                                         competition_parameters)
   

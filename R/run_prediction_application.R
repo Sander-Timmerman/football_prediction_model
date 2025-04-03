@@ -7,6 +7,7 @@ run_prediction_application <- function(football_data_cache = NULL,
                                        all_final_standings_cache = NULL,
                                        n_sims = 10000,
                                        write_results = TRUE,
+                                       edit_blogger = FALSE,
                                        competitions = "all") {
   output <- tryCatch(
     {
@@ -21,9 +22,12 @@ run_prediction_application <- function(football_data_cache = NULL,
                                               transfermarkt_data_new_cache,
                                               all_final_standings_cache)
       local_input <- load_local_input()
-      settings <- load_settings(n_sims, write_results, competitions)
+      settings <- load_settings(n_sims, write_results, competitions, edit_blogger)
+      if(settings$edit_blogger) {
+        blogger_info <- configure_google_token()
+      } else blogger_info <- NULL
       
-      output <- run_prediction(all_cache_numbers, local_input, settings, run_number)
+      output <- run_prediction(all_cache_numbers, local_input, settings, blogger_info, run_number)
       flog.info("Application run finished successfully")
       update_run_history(run_number, success = TRUE)
       

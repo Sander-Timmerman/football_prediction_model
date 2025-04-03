@@ -1,4 +1,4 @@
-predict_next_game_round <- function(prediction, data_source_info, settings, run_number, competition_parameters) {
+predict_next_game_round <- function(prediction, data_source_info, settings, blogger_info, run_number, competition_parameters) {
   flog.info("Starts prediction for next game round")
   urls_tm <- find_data_urls(data_source_info, "transfermarkt", is_current_season = TRUE, settings$current_season, "spieltagtabelle")
   home_teams <- character()
@@ -10,9 +10,15 @@ predict_next_game_round <- function(prediction, data_source_info, settings, run_
     if(is.null(webpage)) next
     matches <- html_nodes(webpage, ".hauptlink.hide-for-small a") %>%
       html_text()
+    if(length(matches) %% 2 != 0) next
     home_teams <- c(home_teams, matches[seq(1, length(matches) - 1, 2)])
     away_teams <- c(away_teams, matches[seq(2, length(matches), 2)])
     competitions <- c(competitions, rep(as.character(urls_tm[row, 1]), length(matches) / 2))
+  }
+  
+  if(sum(length(home_teams), length(away_teams), length(competitions)) == 0) {
+    flog.error("No valid upcoming matches have been found at all, no output for next game round prediction")
+    return(NULL)
   }
   
   df_matches <- data.frame(HomeTeam = home_teams,
@@ -29,7 +35,7 @@ predict_next_game_round <- function(prediction, data_source_info, settings, run_
   
   if(settings$write_results) {
     write.xlsx(match_expectations, file.path("output", run_number, paste0("match_expectations.xlsx")))
-    save_match_expectations_as_html(match_expectations, file.path("output", run_number, paste0("match_expectations.html")))
+    save_match_expectations_as_html(match_expectations, blogger_info, file.path("output", run_number, paste0("match_expectations.html")))
     flog.info(paste0("Written match expectations in the output folder"))
   }
   return(match_expectations)

@@ -54,3 +54,6 @@ output/
 # logs and history
 run_history.csv
 application_logs.log
+
+# config file
+blogger_config.json
