@@ -8,5 +8,5 @@ configure_google_token <- function() {
     scope = "https://www.googleapis.com/auth/blogger"
   )
   
-  return(list(config = config, google_token = google_token, time_requested = Sys.time()))
+  return(list(config = config, google_token = google_token, time_requested = file.info(".httr-oauth")$mtime))
 }

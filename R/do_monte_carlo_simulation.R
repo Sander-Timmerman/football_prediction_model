@@ -1,4 +1,4 @@
-do_monte_carlo_simulation <- function(prediction, football_data_new, namen, settings, run_number, competition_parameters) {
+do_monte_carlo_simulation <- function(prediction, football_data_new, namen, settings, blogger_info, run_number, competition_parameters) {
   all_results_tables <- list()
   flog.info("Starting Monte Carlo simulations")
   competitions <- if(settings$competitions[1] == "all") unique(prediction$Competitie) else intersect(settings$competitions, unique(prediction$Competitie))
@@ -81,7 +81,7 @@ do_monte_carlo_simulation <- function(prediction, football_data_new, namen, sett
             group_by(Rank) %>% 
             summarise(Punten = round(mean(Punten), 1)) %>% 
             pull(Punten)
-          save_results_table_as_html(results_table, points_per_position, file.path("output", run_number, paste0("results_table_", competition, ".html")))
+          save_results_table_as_html(results_table, points_per_position, blogger_info, run_number, competition)
           flog.info(paste0("Written results table for competition ", competition, " in the output folder"))
         }
         results_table

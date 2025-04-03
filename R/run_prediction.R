@@ -52,7 +52,8 @@ run_prediction <- function(all_cache_numbers, local_input, settings, blogger_inf
   all_results_tables <- do_monte_carlo_simulation(prediction, 
                                                   input_data_this_season$football_data, 
                                                   local_input$names, 
-                                                  settings, 
+                                                  settings,
+                                                  blogger_info,
                                                   run_number,
                                                   competition_parameters)
   
