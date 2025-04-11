@@ -33,8 +33,7 @@ predict_next_game_round <- function(prediction, data_source_info, settings, blog
                                          AwayTeam = away_teams,
                                          Competition = competitions,
                                          Date = all_dates) %>%
-    mutate(Date = parse_date_from_transfermarkt(Date, maanden)) %>%
-    filter(Date >= Sys.Date())
+    mutate(Date = parse_date_from_transfermarkt(Date, maanden))
   
   df_matches_football_data <- read.csv("https://www.football-data.co.uk/fixtures.csv") %>%
     filter(Div %in% paste0(data_source_info$Code_football_data, c(0, rep(1, nrow(data_source_info) - 1)))) %>%
@@ -47,12 +46,13 @@ predict_next_game_round <- function(prediction, data_source_info, settings, blog
     rename(Competition = Competitie)
   
   df_matches <- rbind(df_matches_transfermarkt, df_matches_football_data) %>%
+    filter(Date >= Sys.Date()) %>%
     mutate(Seizoen = settings$current_season) %>%
     left_join(data.frame(Competition = names(competition_parameters$goals_per_competition), 
                          Goals_per_match = competition_parameters$goals_per_competition), 
               by = "Competition") %>%
     distinct() %>%
-    arrange(Competition)
+    arrange(Competition, Date)
   
   goal_expectations <- calculate_goal_expectations(prediction, competition_parameters$points_to_goalratio)
   match_expectations <- calculate_match_expectations(df_matches, goal_expectations, df_matches$Goals_per_match, competition_parameters$home_advantage) %>%
