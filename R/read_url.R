@@ -8,7 +8,7 @@ read_url <- function(url, use_rvest = TRUE, stop_if_failed = FALSE, object_to_sa
           page <- read_html(url, encoding = "UTF-8")
         } else page <- readLines(url, encoding = "UTF-8")
         if(attempts > 0) {
-          flog.info(paste("Attempt to read", url, "succeded, resuming"))
+          flog.info(paste("Attempt to read", url, "succeeded, resuming"))
         } else flog.debug(paste("Succesfully read url", url))
         page
       },

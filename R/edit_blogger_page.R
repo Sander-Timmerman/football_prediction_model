@@ -26,7 +26,7 @@ edit_blogger_page <- function(gt_table, blogger_info, page_title) {
   if(response$status_code == 200) {
     flog.info(paste("Updated blogger for page", page_title))
   } else {
-    flog.error(paste0("Blogger not updated for page", page_title, ". Status code: ", response$status_code))
+    flog.error(paste0("Blogger not updated for page ", page_title, ". Status code: ", response$status_code))
   }
   return(gt_table)
 }

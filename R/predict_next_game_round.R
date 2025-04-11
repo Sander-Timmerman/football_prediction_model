@@ -1,4 +1,4 @@
-predict_next_game_round <- function(prediction, data_source_info, settings, blogger_info, run_number, competition_parameters, maanden) {
+predict_next_game_round <- function(prediction, data_source_info, settings, blogger_info, run_number, competition_parameters, maanden, namen) {
   flog.info("Starts prediction for next game round")
   urls_tm <- find_data_urls(data_source_info, "transfermarkt", is_current_season = TRUE, settings$current_season, "spieltagtabelle")
   home_teams <- character()
@@ -22,7 +22,6 @@ predict_next_game_round <- function(prediction, data_source_info, settings, blog
     away_teams <- c(away_teams, matches[seq(2, length(matches), 2)])
     competitions <- c(competitions, rep(as.character(urls_tm[row, 1]), length(matches) / 2))
     all_dates <- c(all_dates, dates)
-    if(length(competitions) != length(all_dates)) browser()
   }
   
   if(sum(length(home_teams), length(away_teams), length(competitions)) == 0) {
@@ -30,23 +29,35 @@ predict_next_game_round <- function(prediction, data_source_info, settings, blog
     return(NULL)
   }
   
-  df_matches <- data.frame(HomeTeam = home_teams,
-                           AwayTeam = away_teams,
-                           Competition = competitions,
-                           Date = all_dates,
-                           Seizoen = settings$current_season) %>%
+  df_matches_transfermarkt <- data.frame(HomeTeam = home_teams,
+                                         AwayTeam = away_teams,
+                                         Competition = competitions,
+                                         Date = all_dates) %>%
     mutate(Date = parse_date_from_transfermarkt(Date, maanden)) %>%
-    left_join(data.frame(Competition = names(competition_parameters$goals_per_competition), 
-                         Goals_per_match = competition_parameters$goals_per_competition), 
-              by = "Competition")
+    filter(Date >= Sys.Date())
   
   df_matches_football_data <- read.csv("https://www.football-data.co.uk/fixtures.csv") %>%
-    filter(Div %in% paste0(data_source_info$Code_football_data, c(0, rep(1, nrow(data_source_info) - 1))))
+    filter(Div %in% paste0(data_source_info$Code_football_data, c(0, rep(1, nrow(data_source_info) - 1)))) %>%
+    mutate(Date = as.Date(Date, format = "%d/%m/%Y"),
+           Div = substr(Div, 1, nchar(Div) - 1),
+           HomeTeam = mgsub(as.character(HomeTeam), namen$Football_data, namen$Transfermarkt),
+           AwayTeam = mgsub(as.character(AwayTeam), namen$Football_data, namen$Transfermarkt)) %>%
+    left_join(data_source_info[1 : 2], by = c("Div"="Code_football_data")) %>%
+    select(HomeTeam, AwayTeam, Competitie, Date) %>%
+    rename(Competition = Competitie)
+  
+  df_matches <- rbind(df_matches_transfermarkt, df_matches_football_data) %>%
+    mutate(Seizoen = settings$current_season) %>%
+    left_join(data.frame(Competition = names(competition_parameters$goals_per_competition), 
+                         Goals_per_match = competition_parameters$goals_per_competition), 
+              by = "Competition") %>%
+    distinct() %>%
+    arrange(Competition)
   
   goal_expectations <- calculate_goal_expectations(prediction, competition_parameters$points_to_goalratio)
   match_expectations <- calculate_match_expectations(df_matches, goal_expectations, df_matches$Goals_per_match, competition_parameters$home_advantage) %>%
     select(-c(Goals_per_match, Seizoen))
-  colnames(match_expectations) <- c("Thuisploeg", "Uitploeg", "Competitie", "Thuisgoals", "Uitgoals", "Thuiswinst", "Gelijk", "Uitwinst")
+  colnames(match_expectations) <- c("Thuisploeg", "Uitploeg", "Competitie", "Datum", "Thuisgoals", "Uitgoals", "Thuiswinst", "Gelijk", "Uitwinst")
   flog.info("Calculated prediction for next game round")
   
   if(settings$write_results) {
