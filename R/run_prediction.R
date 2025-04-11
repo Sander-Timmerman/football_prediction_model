@@ -47,7 +47,8 @@ run_prediction <- function(all_cache_numbers, local_input, settings, blogger_inf
                                                         settings,
                                                         blogger_info,
                                                         run_number,
-                                                        competition_parameters)
+                                                        competition_parameters,
+                                                        local_input$months)
   
   all_results_tables <- do_monte_carlo_simulation(prediction, 
                                                   input_data_this_season$football_data, 

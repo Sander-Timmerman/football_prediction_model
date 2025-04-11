@@ -1,4 +1,4 @@
-parse_date_from_transfermarkt <- function(date_string, maanden) {
+parse_date_from_transfermarkt <- function(date_string, maanden, unknown_values_as_nas = FALSE) {
   date_string[date_string %in% c("-", "")] <- "Jan 1, 1900"
   jaar <- as.numeric(substr(date_string, nchar(date_string) - 3, nchar(date_string)))
   
