@@ -18,7 +18,7 @@ read_url <- function(url, use_rvest = TRUE, stop_if_failed = FALSE, object_to_sa
       }
     )
     attempts <- attempts + 1
-    if(attempts == 3) {
+    if(attempts == 3 & is.null(page[1])) {
       if(stop_if_failed) {
         if(!is.null(object_to_save)) {
           saveRDS(object_to_save, file = file.path("cache", run_number, paste0(object_name, ".rds")))
