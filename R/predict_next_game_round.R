@@ -57,6 +57,12 @@ predict_next_game_round <- function(prediction, data_source_info, settings, blog
   goal_expectations <- calculate_goal_expectations(prediction, competition_parameters$points_to_goalratio)
   match_expectations <- calculate_match_expectations(df_matches, goal_expectations, df_matches$Goals_per_match, competition_parameters$home_advantage) %>%
     select(-c(Goals_per_match, Seizoen))
+  
+  n_matches_lost <- nrow(df_matches) - nrow(match_expectations)
+  if(n_matches_lost > 0) {
+    flog.warn(paste0("Some matches (in total: ", n_matches_lost, ") in the fixtures data had unknown team names. These matches will have no prediction"))
+  }
+  
   colnames(match_expectations) <- c("Thuisploeg", "Uitploeg", "Competitie", "Datum", "Thuisgoals", "Uitgoals", "Thuiswinst", "Gelijk", "Uitwinst")
   flog.info("Calculated prediction for next game round")
   
