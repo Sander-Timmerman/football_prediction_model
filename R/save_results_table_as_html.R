@@ -14,6 +14,6 @@ save_results_table_as_html <- function(results_table, points_per_position, blogg
                   columns = colnames(results_table)[position + 4],
                   id = UUIDgenerate())
   }
-  if(edit_blogger) edit_blogger_page(gt_table, blogger_info, competition)
   gtsave(gt_table, file.path("output", run_number, paste0("results_table_", competition, ".html")))
+  if(edit_blogger) edit_blogger_page(gt_table, blogger_info, competition)
 }
