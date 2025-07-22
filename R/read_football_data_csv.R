@@ -1,11 +1,11 @@
-read_football_data_csv <- function(url, competition, season) {
+read_football_data_csv <- function(url, competition, is_current_season) {
   df_football_data <- tryCatch({
     csv <- suppressWarnings(read.csv(url, fileEncoding = "UTF-8", stringsAsFactors = FALSE))
     flog.debug(paste0("Succesfully read football_data csv with url ", url))
     return(csv)
   },
     error = function(cond) {
-      if(format(Sys.Date(), "%m") %in% c("06", "07", "08") & season == 25) {
+      if(format(Sys.Date(), "%m") %in% c("06", "07", "08") & is_current_season) {
         flog.info(paste0("Competition ",
                          competition,
                          " seems to not have started yet, so no new football data available"))

@@ -10,15 +10,17 @@ load_input_data <- function(football_data_cache, aggregated_football_data_cache,
                                              run_number,
                                              gather_football_data, 
                                              urls_fd, 
-                                             local_input)
-  aggregated_football_data <- use_function_with_caching(aggregated_football_data_cache, 
-                                                        paste0("aggregated_football_data_", period_used),
-                                                        run_number,
-                                                        aggregate_football_data, 
-                                                        football_data, 
-                                                        local_input$names)
+                                             local_input,
+                                             is_current_season)
   
   if(!is_current_season) {
+    aggregated_football_data <- use_function_with_caching(aggregated_football_data_cache, 
+                                                          paste0("aggregated_football_data_", period_used),
+                                                          run_number,
+                                                          aggregate_football_data, 
+                                                          football_data, 
+                                                          local_input$names)
+    
     aggregated_level_two_data <- aggregate_level_two_final_standings(all_final_standings_cache, 
                                                                      local_input$data_source_info, 
                                                                      is_current_season, 
@@ -28,10 +30,11 @@ load_input_data <- function(football_data_cache, aggregated_football_data_cache,
     aggregated_level_two_data <- aggregated_level_two_data[colnames(aggregated_football_data)]
     aggregated_football_data <- rbind(aggregated_football_data, aggregated_level_two_data) %>%
       mutate(Seizoen = as.integer(Seizoen))
+    
+    input_data$aggregated_football_data <- aggregated_football_data
   }
   
   input_data$football_data <- football_data
-  input_data$aggregated_football_data <- aggregated_football_data
   
   player_jsons <- if(is_current_season) list() else use_function_with_caching(player_jsons_cache, 
                                                                               "player_jsons", 

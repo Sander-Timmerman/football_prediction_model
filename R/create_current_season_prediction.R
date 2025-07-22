@@ -2,7 +2,6 @@ create_current_season_prediction <- function(aggregated_football_data_old, input
   flog.info("Using models to make a prediction for current season")
   
   football_data_new <- input_data_new$football_data
-  aggregated_football_data_new <- input_data_new$aggregated_football_data
   aggregated_transfermarkt_data_new <- input_data_new$aggregated_transfermarkt_data
 
   aggregated_football_data_with_shots <- aggregated_football_data_old[!is.na(aggregated_football_data_old$Schotsaldo), ]
@@ -38,7 +37,10 @@ create_current_season_prediction <- function(aggregated_football_data_old, input
       team_combinations
     }) %>%
     ungroup()
-  for(game_round in seq_len(max(football_data_new$Aantalwedstrijden))) {
+  
+  max_number_of_games <- if(nrow(football_data_new) > 0) max(football_data_new$Aantalwedstrijden) else 0
+
+  for(game_round in seq_len(max_number_of_games)) {
     goal_expectations <- calculate_goal_expectations(last_prediction, competition_parameters$points_to_goalratio)
     match_expectations <- calculate_match_expectations(all_matches, goal_expectations, 1.35, competition_parameters$home_advantage) %>%
       mutate(HomePoints = Home_prob * 3 + Draw_prob,

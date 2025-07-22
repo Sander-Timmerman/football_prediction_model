@@ -1,4 +1,4 @@
-gather_football_data <- function(urls_fd, local_input) {
+gather_football_data <- function(urls_fd, local_input, is_current_season) {
   flog.info("Starts gathering data from football_data")
   all_data <- data.frame(HomeTeam = character(),
                          AwayTeam = character(),
@@ -21,7 +21,7 @@ gather_football_data <- function(urls_fd, local_input) {
   for (i in seq_len(nrow(urls_fd))) {
     df_football_data <- read_football_data_csv(as.character(urls_fd[i, 4]),
                                                as.character(urls_fd[i, 1]),
-                                               as.character(urls_fd[i, 2])) %>%
+                                               is_current_season) %>%
       prepare_football_data(urls_fd[i, 1], urls_fd[i, 2], urls_fd[i, 3], local_input)
     
     if(nrow(df_football_data) > 0) {
