@@ -30,5 +30,13 @@ create_model_input <- function(aggregated_football_data, aggregated_transfermark
                by = c("Team" = "Team",
                       "Competitie" = "Competitie",
                       "Seizoen" = "Seizoen"))
+  
+  unknown_teams <- aggregated_transfermarkt_data$Team[!(aggregated_transfermarkt_data$Team %in% model_input$Team)]
+  if(length(unknown_teams > 0)) {
+    flog.warn(paste0("The following teams in Transfermarkt data have no matching team in Football-Data: ", 
+                     paste(unknown_teams, collapse = ", "), 
+                     ". These teams will now be ignored"))
+  }
+  
   return(model_input)
 }
