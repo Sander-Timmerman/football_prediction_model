@@ -24,17 +24,21 @@ prepare_football_data <- function(df_football_data, competitie, seizoen, level, 
   if(length(non_played_matches) > 0) {
     df_football_data <- df_football_data[-non_played_matches, ]
   }
-
-  if(any((!df_football_data$HomeTeam %in% local_input$names$Football_data |
-          !df_football_data$AwayTeam %in% local_input$names$Football_data) &
-         level == 1)) {
+  
+  unknown_home_team_indices <- !df_football_data$HomeTeam %in% local_input$names$Football_data
+  unknown_away_team_indices <- !df_football_data$AwayTeam %in% local_input$names$Football_data
+  
+  if(any(unknown_home_team_indices | unknown_away_team_indices) & level == 1) {
     flog.warn(paste0("At least one team has an unknown name in football_data for competition ", 
                      competitie,
                      ", season ", 
                      seizoen,
                      " and level ",
                      level,
-                     ". This might cause problems when joining with Transfermarkt data"))
+                     ". This might cause problems when joining with Transfermarkt data. Team names: ",
+                     paste(unique(df_football_data$HomeTeam[unknown_home_team_indices],
+                                  df_football_data$AwayTeam[unknown_away_team_indices]),
+                           sep = ", ", collapse = ", ")))
   }
   
   if(!(sum(is.na(df_football_data$HS), 
