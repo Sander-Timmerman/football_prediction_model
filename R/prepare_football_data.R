@@ -1,11 +1,12 @@
 prepare_football_data <- function(df_football_data, competitie, seizoen, level, local_input) {
   df_football_data <- df_football_data[nchar(df_football_data[[1]]) > 0, ]
-  
   if(is.null(df_football_data$HS)) {
     df_football_data$HS <- NA
     df_football_data$AS <- NA
     df_football_data$HST <- NA
     df_football_data$AST <- NA
+    df_football_data$HR <- NA
+    df_football_data$AR <- NA
   }
   
   teams_to_ignore <- local_input$teams_to_ignore %>%

@@ -8,6 +8,8 @@ gather_football_data <- function(urls_fd, local_input, is_current_season) {
                          AS = integer(),
                          HST = integer(),
                          AST = integer(),
+                         HR = integer(),
+                         AR = integer(),
                          HPts = integer(),
                          APts = integer(),
                          Wedstrijdnummer = integer(),

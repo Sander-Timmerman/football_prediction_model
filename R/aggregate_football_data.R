@@ -24,6 +24,7 @@ aggregate_football_data <- function(football_data, namen) {
               Schotopdoelsaldo = Schotenopdoelvoor - Schotenopdoeltegen,
               Schotopdoelratio = Schotenopdoelvoor / sum(Schotenopdoelvoor, Schotenopdoeltegen),
               Schotenopdoelsom = Schotenopdoelvoor + Schotenopdoeltegen,
+              Rodekaartsaldo = (sum(HR) - sum(AR)) / max(Aantalwedstrijden),
               Aantalwedstrijden = max(Aantalwedstrijden)) %>%
     ungroup() %>%
     select(-c(Doelpuntenvoor, Doelpuntentegen, Schotenvoor, Schotentegen, Schotenopdoelvoor, Schotenopdoeltegen)) %>%

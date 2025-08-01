@@ -8,11 +8,12 @@ create_model_with_and_without_shots <- function(model_input, number_games, old_m
       model_input_with_without <- model_input
     }
     
-    non_removable_variables <- c(non_removable_variables, 
-                                 names(fixed_model[[with_or_without]]$coefficients)[-1])
+    non_removable_variables_with_without <- c(non_removable_variables, 
+                                              names(fixed_model[[with_or_without]]$coefficients)[-1])
     
     if(with_or_without == "without_shots") {
-      shots_last_season <- which(substr(colnames(model_input_with_without), 1, 5) == "Schot" & 
+      shots_last_season <- which((substr(colnames(model_input_with_without), 1, 5) == "Schot" |
+                                    substr(colnames(model_input_with_without), 1, 4) == "Rode") & 
                                    substr(colnames(model_input_with_without), 
                                           nchar(colnames(model_input_with_without)) - 13, 
                                           nchar(colnames(model_input_with_without))) == "_vorig_seizoen")
@@ -27,7 +28,7 @@ create_model_with_and_without_shots <- function(model_input, number_games, old_m
     total_goals_this_model <- total_goals[which(complete.cases(model_input_with_without))]
     model_input_with_without <- na.omit(model_input_with_without)
     
-    model_with_without <- fit_model(model_input_with_without, threshold, non_removable_variables)
+    model_with_without <- fit_model(model_input_with_without, threshold, non_removable_variables_with_without)
     performance <- calculate_model_performance(model_with_without, number_games_this_model, total_goals_this_model)
     model_with_without$performance <- performance[1]
     model_with_without$performance_sd <- performance[2]

@@ -21,7 +21,9 @@ read_football_data_csv <- function(url, competition, is_current_season) {
                         FTAG = numeric(0), 
                         FTR = character(0), 
                         HS = numeric(0), 
-                        AS = numeric(0), 
+                        AS = numeric(0),
+                        HR = numeric(0),
+                        AR = numeric(0),
                         HST = numeric(0), 
                         AST = numeric(0)))
     }
