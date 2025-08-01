@@ -2,7 +2,7 @@ train_models <- function(input_data, namen, aggregated_football_data_cache, run_
   flog.info("Starts training prediction models based on data from past seasons")
   
   football_data <- input_data$football_data %>%
-    filter(Aantalwedstrijden > 30)
+    filter(Aantalwedstrijden > 29)
   aggregated_football_data <- input_data$aggregated_football_data
   aggregated_transfermarkt_data <- input_data$aggregated_transfermarkt_data
   
