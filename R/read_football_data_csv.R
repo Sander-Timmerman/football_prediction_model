@@ -1,6 +1,7 @@
 read_football_data_csv <- function(url, competition, is_current_season) {
   df_football_data <- tryCatch({
     csv <- suppressWarnings(read.csv(url, fileEncoding = "UTF-8", stringsAsFactors = FALSE))
+    if(ncol(csv) == 1) stop("Data frame contains only one column, no valid data available")
     flog.debug(paste0("Succesfully read football_data csv with url ", url))
     return(csv)
   },
