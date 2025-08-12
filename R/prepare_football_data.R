@@ -37,8 +37,8 @@ prepare_football_data <- function(df_football_data, competitie, seizoen, level, 
                      " and level ",
                      level,
                      ". This might cause problems when joining with Transfermarkt data. Team names: ",
-                     paste(unique(df_football_data$HomeTeam[unknown_home_team_indices],
-                                  df_football_data$AwayTeam[unknown_away_team_indices]),
+                     paste(unique(c(df_football_data$HomeTeam[unknown_home_team_indices],
+                                    df_football_data$AwayTeam[unknown_away_team_indices])),
                            sep = ", ", collapse = ", ")))
   }
   
