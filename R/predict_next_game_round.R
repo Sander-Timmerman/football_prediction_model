@@ -66,7 +66,9 @@ predict_next_game_round <- function(prediction, data_source_info, settings, blog
                      paste(paste(lost_games$HomeTeam, lost_games$AwayTeam, sep = " - "), collapse = ", ")))
   }
   
-  colnames(match_expectations) <- c("Thuisploeg", "Uitploeg", "Competitie", "Datum", "Thuisgoals", "Uitgoals", "Thuiswinst", "Gelijk", "Uitwinst")
+  if(nrow(match_expectations) > 0) {
+    colnames(match_expectations) <- c("Thuisploeg", "Uitploeg", "Competitie", "Datum", "Thuisgoals", "Uitgoals", "Thuiswinst", "Gelijk", "Uitwinst")
+  }
   flog.info("Calculated prediction for next game round")
   
   if(settings$write_results) {
